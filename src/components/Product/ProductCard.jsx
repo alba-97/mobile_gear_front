@@ -26,7 +26,7 @@ export const ProductCard = ({ product }) => {
   const [showAlert, setShowAlert] = useState(false);
 
   const originalPrice = Math.round(
-    product.price * (product.discount / 100 + 1)
+    product.price / (1 - product.discount / 100)
   );
 
   const handleAddToCart = (event) => {

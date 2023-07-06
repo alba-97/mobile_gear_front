@@ -1,39 +1,53 @@
-import { Box, Divider, Grid, Text, Image } from "@chakra-ui/react";
-import Mobilegear from "../assets/Mobilegear.png";
+import { Box, Divider, Grid, Image, Heading } from "@chakra-ui/react";
+import {
+  ButtonGroup,
+  Container,
+  IconButton,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
+import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 
 export const Footer = () => {
   return (
-    <Box backgroundColor="#3498DB">
-      <Box
-        as="footer"
-        role="contentinfo"
-        maxW="1200px"
-        mx="auto"
-        px={4}
-        py={2}
-        textAlign="center"
-      >
-        <Grid
-          templateColumns={{ base: "1fr", md: "auto 1fr" }}
-          gap={4}
-          alignItems="center"
-        >
-          <Image src={Mobilegear} alt="Mobilegear" boxSize="125px" />
-          <Text color="black" fontSize="lg">
-            Tu tienda smart favorita
-          </Text>
-        </Grid>
-        <Divider mt={4} mb={1} />
-        <Grid
-          templateColumns={{ base: "1fr", md: "auto 1fr" }}
-          alignItems="center"
-        >
-          <Text fontSize="xs" color="white" mb={1}>
-            &copy; {new Date().getFullYear()} Mobile Gear S.R.L. All rights
-            reserved.
-          </Text>
-        </Grid>
-      </Box>
-    </Box>
+    <Container
+      marginTop="20"
+      minW="100%"
+      as="footer"
+      role="contentinfo"
+      py={{ base: "12", md: "16" }}
+      backgroundColor="black"
+      color="white"
+    >
+      <Stack spacing={{ base: "4", md: "5" }}>
+        <Stack justify="space-between" direction="row" align="center">
+          <Heading>Mobile Gear</Heading>
+          <ButtonGroup variant="ghost">
+            <IconButton
+              as="a"
+              href="#"
+              aria-label="LinkedIn"
+              icon={<FaLinkedin fontSize="1.25rem" />}
+            />
+            <IconButton
+              as="a"
+              href="#"
+              aria-label="GitHub"
+              icon={<FaGithub fontSize="1.25rem" />}
+            />
+            <IconButton
+              as="a"
+              href="#"
+              aria-label="Twitter"
+              icon={<FaTwitter fontSize="1.25rem" />}
+            />
+          </ButtonGroup>
+        </Stack>
+        <Text fontSize="sm" color="subtle">
+          &copy; {new Date().getFullYear()} Mobile Gear , Inc. All rights
+          reserved.
+        </Text>
+      </Stack>
+    </Container>
   );
 };
