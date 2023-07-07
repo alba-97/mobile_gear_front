@@ -27,7 +27,7 @@ export const loginUser = (email, password) => async (dispatch) => {
     });
 
     const { token, user } = res.data;
-    localStorage.setItem(token);
+    localStorage.setItem("jwt", token);
     await dispatch(login(user));
   } catch (error) {
     console.error("Login error:", error);
