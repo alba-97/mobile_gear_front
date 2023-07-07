@@ -15,7 +15,6 @@ import useInput from "../../hooks/useInput";
 import { useDispatch } from "react-redux";
 import { fetchProducts } from "../../state/products/productsActions";
 import { Footer } from "../Footer";
-import captura from "../../assets/Captura.JPG";
 
 export const Home = () => {
   const dispatch = useDispatch();
@@ -60,7 +59,12 @@ export const Home = () => {
 
   return (
     <Box backgroundColor="gray.100" minHeight="100vh">
-      <Image src={captura} alt="banner" width="100%" height="400" />
+      <Image
+        src="src/assets/Captura.JPG"
+        alt="banner"
+        width="100%"
+        height="400"
+      />
       <Center mt="20" mb="20">
         <Heading>Special Offers</Heading>
       </Center>
