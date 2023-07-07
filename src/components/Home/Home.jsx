@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Center,
   Heading,
   Image,
-  Select,
   Menu,
   MenuList,
   MenuButton,
@@ -13,9 +12,10 @@ import {
 import { ProductGrid } from "../Product/ProductGrid";
 import { Slider } from "./Slider";
 import useInput from "../../hooks/useInput";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { fetchProducts } from "../../state/products/productsActions";
 import { Footer } from "../Footer";
+import captura from "../../assets/Captura.JPG";
 
 export const Home = () => {
   const dispatch = useDispatch();
@@ -60,12 +60,7 @@ export const Home = () => {
 
   return (
     <Box backgroundColor="gray.100" minHeight="100vh">
-      <Image
-        src="src/assets/Captura.JPG"
-        alt="banner"
-        width="100%"
-        height="400"
-      />
+      <Image src={captura} alt="banner" width="100%" height="400" />
       <Center mt="20" mb="20">
         <Heading>Special Offers</Heading>
       </Center>
