@@ -60,7 +60,7 @@ export const Home = () => {
   return (
     <Box backgroundColor="gray.100" minHeight="100vh">
       <Image
-        src="src/assets/Captura.JPG"
+        src="https://i.imgur.com/z6Jbhdb.jpg"
         alt="banner"
         width="100%"
         height="400"
