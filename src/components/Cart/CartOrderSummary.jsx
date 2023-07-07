@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Box, Heading, Text, Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { checkout } from "../../state/checkout/checkoutActions";
+import { clearCart } from "../../state/cart/cartSlice";
 
 export const CartOrderSummary = () => {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ export const CartOrderSummary = () => {
 
   const handleCheckout = () => {
     dispatch(checkout(Object.values(items)));
+    dispatch(clearCart());
     navigate("/payments");
   };
 
