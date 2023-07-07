@@ -11,8 +11,6 @@ import { Admin } from "./components/Admin/Admin";
 import { History } from "./components/History";
 import { Login } from "./components/Login";
 import { SignUp } from "./components/SignUp";
-import { AddProducts } from "./components/Admin/AddProducts";
-import { EditProducts } from "./components/Admin/EditProducts";
 import { Box } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -21,6 +19,7 @@ import * as settings from "../src/settings";
 import { login } from "./state/user/userSlice";
 import { fetchProducts } from "./state/products/productsActions";
 import { useDispatch } from "react-redux";
+import getHeaders from "./hooks/getHeaders";
 
 function App() {
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
@@ -31,7 +30,10 @@ function App() {
 
   useEffect(() => {
     async function fetchUser() {
-      const user = await axios.get(`${settings.axiosURL}/users/me`);
+      const user = await axios.get(
+        `${settings.axiosURL}/users/me`,
+        getHeaders()
+      );
       await dispatch(login(user.data));
     }
     fetchUser();

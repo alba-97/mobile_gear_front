@@ -4,6 +4,7 @@ const initialState = {
   isAuthenticated: false,
   userData: null,
   is_admin: false,
+  cookie: {},
   users: [],
 };
 
@@ -28,6 +29,9 @@ const userSlice = createSlice({
     },
     list: (state, action) => {
       state.users = action.payload;
+    },
+    setCookie: (state, action) => {
+      state.cookie = action.payload;
     },
   },
 });

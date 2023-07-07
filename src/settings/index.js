@@ -1,1 +1,1 @@
-export const axiosURL = "https://mobile-gear-back.onrender.com";
+export const axiosURL = "http://localhost:8080";
