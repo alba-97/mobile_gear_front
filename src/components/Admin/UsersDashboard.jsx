@@ -4,7 +4,6 @@ import { fetchUsers } from "../../state/user/userActions";
 import { Link, Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 import axios from "axios";
 import * as settings from "../../settings";
-import getHeaders from "../../hooks/getHeaders";
 
 export const UsersDashboard = () => {
   const dispatch = useDispatch();
@@ -16,7 +15,7 @@ export const UsersDashboard = () => {
   }, [dispatch]);
 
   const handleSwitch = async (id) => {
-    await axios.put(`${settings.axiosURL}/admin/users/${id}`, {}, getHeaders());
+    await axios.put(`${settings.axiosURL}/admin/users/${id}`);
     dispatch(fetchUsers());
   };
 

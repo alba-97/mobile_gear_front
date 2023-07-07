@@ -6,7 +6,6 @@ import {
   deleteCategory as deleteCategoryAction,
 } from "./categoriesSlice";
 import * as settings from "../../settings";
-import getHeaders from "../../hooks/getHeaders";
 
 export const fetchCategories = () => async (dispatch) => {
   dispatch(setLoading(true));
@@ -22,13 +21,9 @@ export const fetchCategories = () => async (dispatch) => {
 
 export const addCategory = (name) => async () => {
   try {
-    await axios.post(
-      `${settings.axiosURL}/categories`,
-      {
-        name,
-      },
-      getHeaders()
-    );
+    await axios.post(`${settings.axiosURL}/categories`, {
+      name,
+    });
   } catch (error) {
     console.error("add error:", error);
   }
@@ -37,13 +32,9 @@ export const addCategory = (name) => async () => {
 export const editCategory = (category) => async () => {
   try {
     const { id, name } = category;
-    await axios.put(
-      `${settings.axiosURL}/categories/${id}`,
-      {
-        name,
-      },
-      getHeaders()
-    );
+    await axios.put(`${settings.axiosURL}/categories/${id}`, {
+      name,
+    });
   } catch (error) {
     console.error("edit error: ", error);
   }
@@ -51,10 +42,7 @@ export const editCategory = (category) => async () => {
 
 export const deleteCategory = (categoryId) => async (dispatch) => {
   try {
-    await axios.delete(
-      `${settings.axiosURL}/categories/${categoryId}`,
-      getHeaders()
-    );
+    await axios.delete(`${settings.axiosURL}/categories/${categoryId}`);
     dispatch(deleteCategoryAction(categoryId));
   } catch (error) {
     console.error("delete error: ", error);

@@ -8,7 +8,6 @@ import {
   deleteProduct as deleteProductAction,
 } from "./productsSlice";
 import * as settings from "../../settings";
-import getHeaders from "../../hooks/getHeaders";
 
 export const fetchProducts =
   (searchTerm = "", filters = {}) =>
@@ -59,11 +58,7 @@ export const fetchDiscountedProducts = () => async (dispatch) => {
 
 export const addProduct = (productData) => async () => {
   try {
-    await axios.post(
-      `${settings.axiosURL}/admin/products`,
-      productData,
-      getHeaders()
-    );
+    await axios.post(`${settings.axiosURL}/admin/products`, productData);
   } catch (error) {
     console.error("Login error:", error);
   }
@@ -81,19 +76,15 @@ export const editProduct = (product) => async () => {
       features,
       product_img,
     } = product;
-    await axios.put(
-      `${settings.axiosURL}/admin/products/${id}`,
-      {
-        name,
-        description,
-        stock,
-        price,
-        discount,
-        features,
-        product_img,
-      },
-      getHeaders()
-    );
+    await axios.put(`${settings.axiosURL}/admin/products/${id}`, {
+      name,
+      description,
+      stock,
+      price,
+      discount,
+      features,
+      product_img,
+    });
   } catch (error) {
     console.error("edit error: ", error);
   }
@@ -101,10 +92,7 @@ export const editProduct = (product) => async () => {
 
 export const deleteProduct = (productId) => async (dispatch) => {
   try {
-    await axios.delete(
-      `${settings.axiosURL}/admin/products/${productId}`,
-      getHeaders()
-    );
+    await axios.delete(`${settings.axiosURL}/admin/products/${productId}`);
     dispatch(deleteProductAction(productId));
   } catch (error) {
     console.error("delete error: ", error);

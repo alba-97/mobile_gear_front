@@ -19,21 +19,16 @@ import * as settings from "../src/settings";
 import { login } from "./state/user/userSlice";
 import { fetchProducts } from "./state/products/productsActions";
 import { useDispatch } from "react-redux";
-import getHeaders from "./hooks/getHeaders";
 
 function App() {
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
   const is_admin = useSelector((state) => state.user.is_admin);
-  const userData = useSelector((state) => state.user.userData);
   const dispatch = useDispatch();
 
   useEffect(() => {
     async function fetchUser() {
-      const user = await axios.get(
-        `${settings.axiosURL}/users/me`,
-        getHeaders()
-      );
+      const user = await axios.get(`${settings.axiosURL}/users/me`);
       await dispatch(login(user.data));
     }
     fetchUser();
