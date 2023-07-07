@@ -2,6 +2,7 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 import { login, logout, register, list } from "./userSlice";
 import * as settings from "../../settings";
+import getHeaders from "../../hooks/getHeaders";
 
 export const registerUser = (username, email, password) => async (dispatch) => {
   try {
@@ -25,8 +26,9 @@ export const loginUser = (email, password) => async (dispatch) => {
       password,
     });
 
-    const userData = res.data;
-    await dispatch(login(userData));
+    const { token, user } = res.data;
+    localStorage.setItem(token);
+    await dispatch(login(user));
   } catch (error) {
     console.error("Login error:", error);
   }
@@ -35,7 +37,7 @@ export const loginUser = (email, password) => async (dispatch) => {
 export const logoutUser = () => async (dispatch) => {
   try {
     await axios.post(`${settings.axiosURL}/users/logout`);
-    cookies.remove("token");
+    localStorage.clear();
     dispatch(logout());
   } catch (error) {
     console.error("Login error:", error);
@@ -44,7 +46,10 @@ export const logoutUser = () => async (dispatch) => {
 
 export const fetchUsers = () => async (dispatch) => {
   try {
-    const response = await axios.get(`${settings.axiosURL}/admin/users`);
+    const response = await axios.get(
+      `${settings.axiosURL}/admin/users`,
+      getHeaders()
+    );
     dispatch(list(response.data));
   } catch (error) {
     console.error("Fetch error:", error);
