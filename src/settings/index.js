@@ -1,1 +1,1 @@
-export const axiosURL = "https://mobile-gear-back-qao9.onrender.com";
+export const axiosURL = import.meta.env.VITE_API_URL;
