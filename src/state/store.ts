@@ -7,7 +7,6 @@ import ordersReducer from "./orders/ordersSlice";
 import categoriesReducer from "./categories/categoriesSlice";
 import filterReducer from "./filters/filterSlice";
 
-
 const store = configureStore({
   reducer: {
     user: userReducer,

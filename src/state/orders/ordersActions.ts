@@ -1,9 +1,10 @@
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import { setOrders, setLoading, setError } from "./ordersSlice";
 import * as settings from "../../settings";
 import getHeaders from "../../hooks/getHeaders";
+import { Dispatch } from "@reduxjs/toolkit";
 
-export const fetchOrders = () => async (dispatch) => {
+export const fetchOrders = () => async (dispatch: Dispatch) => {
   dispatch(setLoading(true));
   try {
     const response = await axios.get(
@@ -12,7 +13,7 @@ export const fetchOrders = () => async (dispatch) => {
     );
     dispatch(setOrders(response.data));
   } catch (error) {
-    dispatch(setError(error.message));
+    if (isAxiosError(error)) dispatch(setError(error.message));
   } finally {
     dispatch(setLoading(false));
   }
