@@ -1,23 +1,23 @@
 import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { fetchUsers } from "../../state/user/userActions";
 import { Link, Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 import axios from "axios";
 import * as settings from "../../settings";
 import getHeaders from "../../hooks/getHeaders";
+import { RootState } from "@/state/store";
 
 export const UsersDashboard = () => {
-  const dispatch = useDispatch();
-  const users = useSelector((state) => state.user.users);
-  const admin = useSelector((state) => state.user.userData);
+  const users = useSelector((state: RootState) => state.user.users);
+  const admin = useSelector((state: RootState) => state.user.userData);
 
   useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
+    fetchUsers();
+  }, []);
 
-  const handleSwitch = async (id) => {
+  const handleSwitch = async (id: number) => {
     await axios.put(`${settings.axiosURL}/admin/users/${id}`, {}, getHeaders());
-    dispatch(fetchUsers());
+    fetchUsers();
   };
 
   return (
@@ -44,7 +44,7 @@ export const UsersDashboard = () => {
                   {admin.id != user.id && (
                     <Link
                       onClick={() => {
-                        handleSwitch(user.id);
+                        user.id && handleSwitch(user.id);
                       }}
                       fontSize="xs"
                     >

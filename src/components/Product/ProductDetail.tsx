@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { useSelector, useDispatch } from "react-redux";
-import { addItemToCart, updateQuantity } from "../../state/cart/cartSlice";
+import { useSelector } from "react-redux";
+import { addItemToCart } from "../../state/cart/cartSlice";
 import { fetchProduct } from "../../state/products/productsActions";
 import {
   Box,
@@ -14,7 +14,6 @@ import {
   Divider,
   Center,
   HStack,
-  VStack,
   useColorModeValue as mode,
   Alert,
   AlertIcon,
@@ -22,23 +21,26 @@ import {
 import { Image } from "@chakra-ui/react";
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
+import { RootState } from "@/state/store";
 
 export const ProductDetail = () => {
   const { id } = useParams();
-  const dispatch = useDispatch();
-  const product = useSelector((state) => state.products.product);
-  const cartItems = useSelector((state) => state.cart.items);
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const product = useSelector((state: RootState) => state.products.product);
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.user.isAuthenticated
+  );
 
   const [count, setCount] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
 
-  const originalPrice = Math.round(
-    product.price * (product.discount / 100 + 1)
-  );
+  const originalPrice =
+    product?.price &&
+    product?.discount &&
+    Math.round(product.price * (product.discount / 100 + 1));
 
   useEffect(() => {
-    dispatch(fetchProduct(id));
+    id && fetchProduct(+id);
   }, [id]);
 
   if (!product || !product.brand) {
@@ -69,12 +71,12 @@ export const ProductDetail = () => {
       quantity: count > 0 ? count : 1,
     };
 
-    const existingItem = cartItems[item.id];
+    const existingItem = item.id && cartItems[item.id];
 
     if (existingItem) {
       alert("Item is already in the cart");
     } else {
-      dispatch(addItemToCart(item));
+      addItemToCart(item);
 
       setShowAlert(true);
 
@@ -83,7 +85,7 @@ export const ProductDetail = () => {
   };
 
   const renderCartButton = () => {
-    const existingItem = cartItems[product.id];
+    const existingItem = product.id && cartItems[product.id];
 
     if (existingItem) {
       return (

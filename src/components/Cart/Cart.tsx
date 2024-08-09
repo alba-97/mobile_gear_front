@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 import { CartItem } from "./CartItem";
@@ -16,9 +15,11 @@ import {
 } from "@chakra-ui/react";
 
 import { useSelector } from "react-redux";
+import { RootState } from "@/state/store";
+import { ICart } from "@/interfaces/Cart";
 
 export const Cart = () => {
-  const items = useSelector((state) => state.cart.items);
+  const items = useSelector((state: RootState) => state.cart.items);
   return (
     <Center backgroundColor="#EDF2F7" minHeight="100vh">
       <Box
@@ -56,8 +57,9 @@ export const Cart = () => {
             </Heading>
 
             <Stack spacing="6">
-              {Object.values(items).map((item) => {
-                return <CartItem key={item.id} {...item} />;
+              {Object.values(items).map((_item) => {
+                const item = _item as ICart;
+                return <CartItem key={item.id} item={item} />;
               })}
             </Stack>
           </Stack>

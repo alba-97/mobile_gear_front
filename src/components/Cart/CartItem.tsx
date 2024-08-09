@@ -1,28 +1,34 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Image, Text, IconButton } from "@chakra-ui/react";
+import { Flex, Image, Text, IconButton } from "@chakra-ui/react";
 import { AddIcon, MinusIcon, DeleteIcon } from "@chakra-ui/icons";
 import { updateQuantity, removeItemFromCart } from "../../state/cart/cartSlice";
+import { RootState } from "@/state/store";
+import { ICart } from "@/interfaces/Cart";
 
-export const CartItem = ({ id, name, image, price, quantity }) => {
-  const dispatch = useDispatch();
+interface ICartItemProps {
+  item: ICart;
+}
+
+export const CartItem = ({ item }: ICartItemProps) => {
+  const { id, name, image, price, quantity } = item;
+
   const navigate = useNavigate();
 
-  const items = useSelector((state) => state.cart.items);
+  const items = useSelector((state: RootState) => state.cart.items);
 
   const increment = () => {
-    dispatch(updateQuantity({ id, quantity: quantity + 1 }));
+    updateQuantity({ id, quantity: quantity + 1 });
   };
 
   const decrement = () => {
     if (quantity > 1) {
-      dispatch(updateQuantity({ id, quantity: quantity - 1 }));
+      updateQuantity({ id, quantity: quantity - 1 });
     }
   };
 
   const handleRemove = () => {
-    dispatch(removeItemFromCart(id));
+    removeItemFromCart(id);
 
     if (Object.keys(items).length === 1) {
       navigate("/");

@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, Image, Heading } from "@chakra-ui/react";
+import { Heading } from "@chakra-ui/react";
 import {
   ButtonGroup,
   Container,

@@ -1,14 +1,8 @@
+import { ICarts } from "@/interfaces/Cart";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface CartState {
-  items: {
-    [key: string]: {
-      id: string;
-      name: string;
-      price: number;
-      quantity: number;
-    };
-  };
+  items: ICarts;
   totalPrice: number;
 }
 

@@ -1,8 +1,22 @@
+import { User } from "@/interfaces/User";
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+interface UserState {
+  isAuthenticated: boolean;
+  userData: User;
+  is_admin: boolean;
+  cookie: {};
+  users: User[];
+}
+
+const initialState: UserState = {
   isAuthenticated: false,
-  userData: null,
+  userData: {
+    id: null,
+    email: "",
+    username: "",
+    is_admin: false,
+  },
   is_admin: false,
   cookie: {},
   users: [],
@@ -24,7 +38,7 @@ const userSlice = createSlice({
     },
     logout: (state) => {
       state.isAuthenticated = false;
-      state.userData = null;
+      state.userData = initialState.userData;
       state.is_admin = false;
     },
     list: (state, action) => {

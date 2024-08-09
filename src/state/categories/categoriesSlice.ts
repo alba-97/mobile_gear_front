@@ -1,6 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { Category } from "@/interfaces/Product";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState = {
+export interface CategoryState {
+  categories: Category[];
+  isLoading: boolean;
+  error: string | null;
+}
+
+const initialState: CategoryState = {
   categories: [],
   isLoading: false,
   error: null,
@@ -19,7 +26,7 @@ const categoriesSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
-    addCategory: (state, action) => {
+    addCategory: (state, action: PayloadAction<Category>) => {
       state.categories.push(action.payload);
     },
     editCategory: (state, action) => {

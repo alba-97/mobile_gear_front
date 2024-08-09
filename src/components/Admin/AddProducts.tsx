@@ -13,11 +13,16 @@ import {
   AlertIcon,
 } from "@chakra-ui/react";
 import useInput from "../../hooks/useInput";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { fetchCategories } from "../../state/categories/categoriesActions";
 import { addProduct } from "../../state/products/productsActions";
+import { RootState } from "@/state/store";
 
-export const AddProducts = ({ setSelectedPanel }) => {
+interface IAddProductsProps {
+  setSelectedPanel: (panel: string) => void;
+}
+
+export const AddProducts = ({ setSelectedPanel }: IAddProductsProps) => {
   const name = useInput();
   const product_img = useInput();
   const description = useInput();
@@ -28,17 +33,17 @@ export const AddProducts = ({ setSelectedPanel }) => {
   const category = useInput();
   const brand = useInput();
 
-  const dispatch = useDispatch();
-
-  const categories = useSelector((state) => state.categories.categories);
+  const categories = useSelector(
+    (state: RootState) => state.categories.categories
+  );
 
   useEffect(() => {
-    dispatch(fetchCategories());
-  }, [dispatch]);
+    fetchCategories();
+  }, []);
 
   const [showAlert, setShowAlert] = useState(false);
 
-  const handleAddProduct = (e) => {
+  const handleAddProduct = (e: React.FormEvent) => {
     e.preventDefault();
 
     const productData = {
@@ -53,7 +58,7 @@ export const AddProducts = ({ setSelectedPanel }) => {
       categoryId: Number(category.value),
     };
 
-    dispatch(addProduct(productData));
+    addProduct(productData);
 
     setShowAlert(true);
 
@@ -132,10 +137,10 @@ export const AddProducts = ({ setSelectedPanel }) => {
 
           <FormControl>
             <FormLabel>Brand</FormLabel>
-            <Select id="brand" type="number" {...brand}>
+            <Select id="brand">
               {["", "apple", "samsung"].map((brand, i) => {
                 return (
-                  <option value={i} id={i}>
+                  <option value={i} id={`${i}`}>
                     {brand}
                   </option>
                 );
@@ -145,10 +150,10 @@ export const AddProducts = ({ setSelectedPanel }) => {
 
           <FormControl>
             <FormLabel>Category</FormLabel>
-            <Select id="category" type="number" {...category}>
+            <Select id="category">
               {categories.map((item) => {
                 return (
-                  <option value={item.id} id={item.id}>
+                  <option value={item.id} id={`${item.id}`}>
                     {item.name}
                   </option>
                 );

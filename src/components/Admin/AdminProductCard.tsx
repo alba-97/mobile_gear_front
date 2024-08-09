@@ -1,8 +1,8 @@
-import React from "react";
-import { Box, Grid, Image, Text, IconButton } from "@chakra-ui/react";
+import { Grid, Image, Text, IconButton } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
+import { Product } from "@/interfaces/Product";
 
-const truncateDescription = (description) => {
+const truncateDescription = (description: string) => {
   if (description) {
     const words = description.split(" ");
     if (words.length > 10) {
@@ -13,7 +13,15 @@ const truncateDescription = (description) => {
   return "";
 };
 
-export const AdminProductCard = ({ product, handleDelete }) => {
+interface IAdminProductCardProps {
+  product: Product;
+  handleDelete: (product: Product, event: React.MouseEvent) => void;
+}
+
+export const AdminProductCard = ({
+  product,
+  handleDelete,
+}: IAdminProductCardProps) => {
   return (
     <Grid
       templateColumns="repeat(5, 1fr)"
@@ -29,7 +37,9 @@ export const AdminProductCard = ({ product, handleDelete }) => {
         objectFit="cover"
       />
       <Text fontWeight="bold">{product.name}</Text>
-      <Text>{truncateDescription(product.description)}</Text>
+      <Text>
+        {product.description && truncateDescription(product.description)}
+      </Text>
       <Text>{product.price}</Text>
       <IconButton
         aria-label="Delete product"

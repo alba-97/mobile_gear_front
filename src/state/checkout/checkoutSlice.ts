@@ -1,11 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+interface CheckoutState {
+  loading: boolean;
+  error: string | null;
+  completed: boolean;
+}
+
+const initialState: CheckoutState = {
+  loading: false,
+  completed: false,
+  error: null,
+};
+
 export const checkoutSlice = createSlice({
   name: "checkout",
-  initialState: {
-    loading: false,
-    error: null,
-  },
+  initialState,
   reducers: {
     checkoutRequest: (state) => {
       state.loading = true;

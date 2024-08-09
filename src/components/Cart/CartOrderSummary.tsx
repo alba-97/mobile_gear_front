@@ -1,28 +1,29 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Box, Heading, Text, Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { checkout } from "../../state/checkout/checkoutActions";
 import { clearCart } from "../../state/cart/cartSlice";
+import { RootState } from "@/state/store";
+import { ICart } from "@/interfaces/Cart";
 
 export const CartOrderSummary = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const items = useSelector((state) => state.cart.items);
-  const totalPrice = useSelector((state) => state.cart.totalPrice);
-  const checkoutLoading = useSelector((state) => state.checkout.loading);
-  const checkoutError = useSelector((state) => state.checkout.error);
-  const checkoutState = useSelector((state) => state.checkout);
+  const items = useSelector((state: RootState) => state.cart.items);
+  const checkoutLoading = useSelector(
+    (state: RootState) => state.checkout.loading
+  );
+  const checkoutState = useSelector((state: RootState) => state.checkout);
   const deliveryAmount = 1000;
 
-  const subtotal = Object.values(items).reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
+  const subtotal = Object.values(items).reduce((total: number, _item) => {
+    const item = _item as ICart;
+    return total + item.price * item.quantity;
+  }, 0);
 
   const handleCheckout = () => {
-    dispatch(checkout(Object.values(items)));
-    dispatch(clearCart());
+    checkout(Object.values(items));
+    clearCart();
     navigate("/payments");
   };
 

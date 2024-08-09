@@ -1,6 +1,13 @@
+import { Order } from "@/interfaces/Order";
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+interface OrderState {
+  orders: Order[];
+  isLoading: boolean;
+  error: string | null;
+}
+
+const initialState: OrderState = {
   orders: [],
   isLoading: false,
   error: null,

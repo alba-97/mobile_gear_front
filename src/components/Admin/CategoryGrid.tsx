@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Button, Box } from "@chakra-ui/react";
 import { CategoryCard } from "./CategoryCard";
 import {
@@ -7,25 +7,31 @@ import {
   deleteCategory,
   addCategory,
 } from "../../state/categories/categoriesActions";
+import { RootState } from "@/state/store";
+import { Category } from "@/interfaces/Product";
 
 export const CategoryGrid = () => {
-  const dispatch = useDispatch();
-  const categories = useSelector((state) => state.categories.categories);
+  const categories = useSelector(
+    (state: RootState) => state.categories.categories
+  );
 
   const [refetch, setRefetch] = useState(false);
 
-  const handleDelete = (category, event) => {
+  const handleDelete = (
+    category: Category,
+    event: React.MouseEvent<Element>
+  ) => {
     event.stopPropagation();
-    dispatch(deleteCategory(category.id));
+    deleteCategory(category.id);
     setRefetch(!refetch);
   };
 
   useEffect(() => {
-    dispatch(fetchCategories());
-  }, [dispatch, refetch]);
+    fetchCategories();
+  }, [refetch]);
 
   const handleAdd = () => {
-    dispatch(addCategory("New category"));
+    addCategory("New category");
     setRefetch(!refetch);
   };
 

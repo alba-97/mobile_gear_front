@@ -1,24 +1,25 @@
-import React, { useEffect, useState } from "react";
 import useInput from "../../hooks/useInput";
 
 import { Box, Button, Input, Textarea } from "@chakra-ui/react";
-import { addProduct, editProduct } from "../../state/products/productsActions";
-import { AdminProductsGrid } from "./AdminProductsGrid";
-import { useDispatch } from "react-redux";
+import { editProduct } from "../../state/products/productsActions";
+import { Product } from "@/interfaces/Product";
+
+interface IAdminProductsDetailsProps {
+  selectedProduct: Product;
+  setSelectedProduct: (product: Product) => void;
+}
 
 export const AdminProductsDetails = ({
   selectedProduct,
   setSelectedProduct,
-}) => {
+}: IAdminProductsDetailsProps) => {
   const name = useInput(selectedProduct.name);
   const features = useInput(selectedProduct.features);
-  const price = useInput(selectedProduct.price);
-  const stock = useInput(selectedProduct.stock);
+  const price = useInput(`${selectedProduct.price}`);
+  const stock = useInput(`${selectedProduct.stock}`);
   const product_img = useInput(selectedProduct.product_img);
   const description = useInput(selectedProduct.description);
-  const discount = useInput(selectedProduct.discount);
-
-  const dispatch = useDispatch();
+  const discount = useInput(`${selectedProduct.discount}`);
 
   const handleSaveChanges = () => {
     const productData = {
@@ -27,13 +28,13 @@ export const AdminProductsDetails = ({
       product_img: product_img.value,
       description: description.value,
       features: features.value,
-      price: parseFloat(price.value),
-      discount: parseInt(discount.value),
+      price: parseFloat(`${price.value}`),
+      discount: parseInt(`${discount.value}`),
       stock: Number(stock.value),
     };
 
-    dispatch(editProduct(productData));
-    setSelectedProduct({ id: null });
+    editProduct(productData);
+    setSelectedProduct({ id: undefined });
   };
 
   return (

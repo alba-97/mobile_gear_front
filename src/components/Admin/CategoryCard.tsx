@@ -2,19 +2,23 @@ import { useState } from "react";
 import { Button, Input, Grid, Text, IconButton } from "@chakra-ui/react";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import useInput from "../../hooks/useInput";
-import { useDispatch } from "react-redux";
 
-import {
-  editCategory,
-  fetchCategories,
-} from "../../state/categories/categoriesActions";
+import { editCategory } from "../../state/categories/categoriesActions";
+import { Category } from "@/interfaces/Product";
+
+interface ICategoryCardProps {
+  category: Category;
+  handleDelete: (category: Category, event: React.MouseEvent<Element>) => void;
+  setRefetch: React.Dispatch<React.SetStateAction<boolean>>;
+  refetch: boolean;
+}
 
 export const CategoryCard = ({
   category,
   handleDelete,
   setRefetch,
   refetch,
-}) => {
+}: ICategoryCardProps) => {
   const [isEditing, setIsEditing] = useState(false);
   let newCategory = useInput();
 
@@ -22,11 +26,9 @@ export const CategoryCard = ({
     setIsEditing(true);
   };
 
-  const dispatch = useDispatch();
-
-  const handleSubmit = (id) => {
+  const handleSubmit = (id: number) => {
     setIsEditing(false);
-    dispatch(editCategory({ id, name: newCategory.value }));
+    editCategory({ id, name: newCategory.value });
     setRefetch(!refetch);
   };
 
@@ -51,7 +53,7 @@ export const CategoryCard = ({
         <IconButton
           aria-label="Edit category"
           icon={<EditIcon />}
-          onClick={(event) => handleEdit(category, event)}
+          onClick={() => handleEdit()}
         />
       )}
 

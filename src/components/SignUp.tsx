@@ -1,9 +1,6 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 
 import useInput from "../hooks/useInput";
-import * as settings from "../settings";
 import { registerUser } from "../state/user/userActions";
 import { Link } from "react-router-dom";
 
@@ -19,15 +16,14 @@ import {
 } from "@chakra-ui/react";
 
 export const SignUp = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const username = useInput();
   const email = useInput();
   const password = useInput();
 
-  const handleRegister = async (e) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    await dispatch(registerUser(username.value, email.value, password.value));
+    await registerUser(username.value, email.value, password.value);
     navigate("/login");
   };
 
