@@ -30,8 +30,11 @@
     "react-router-dom": "^6.11.1",
     "react-scripts": "^5.0.1",
     "redux-logger": "^3.0.6",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "universal-cookie": "^4.0.4",
-    "vite-plugin-istanbul": "^6.0.2"
+    "vite-plugin-istanbul": "^6.0.2",
+    "vite-tsconfig-paths": "^5.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
