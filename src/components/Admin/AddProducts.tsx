@@ -13,7 +13,7 @@ import {
   AlertIcon,
 } from "@chakra-ui/react";
 import useInput from "../../hooks/useInput";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../../state/categories/categoriesActions";
 import { addProduct } from "../../state/products/productsActions";
 import { RootState } from "@/state/store";
@@ -37,8 +37,10 @@ export const AddProducts = ({ setSelectedPanel }: IAddProductsProps) => {
     (state: RootState) => state.categories.categories
   );
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    fetchCategories();
+    fetchCategories()(dispatch);
   }, []);
 
   const [showAlert, setShowAlert] = useState(false);

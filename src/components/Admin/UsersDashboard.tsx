@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../../state/user/userActions";
 import { Link, Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 import axios from "axios";
@@ -10,14 +10,15 @@ import { RootState } from "@/state/store";
 export const UsersDashboard = () => {
   const users = useSelector((state: RootState) => state.user.users);
   const admin = useSelector((state: RootState) => state.user.userData);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchUsers();
+    fetchUsers()(dispatch);
   }, []);
 
   const handleSwitch = async (id: number) => {
     await axios.put(`${settings.axiosURL}/admin/users/${id}`, {}, getHeaders());
-    fetchUsers();
+    fetchUsers()(dispatch);
   };
 
   return (

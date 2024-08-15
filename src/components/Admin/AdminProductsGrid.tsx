@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../state/products/productsActions";
 import { Box } from "@chakra-ui/react";
 import { AdminProductCard } from "./AdminProductCard";
@@ -17,12 +17,14 @@ export const AdminProductsGrid = () => {
 
   const handleDelete = (product: Product, event: React.MouseEvent<Element>) => {
     event.stopPropagation();
-    product.id && deleteProduct(product.id);
+    product.id && deleteProduct(product.id)(dispatch);
     setRefetch(!refetch);
   };
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    fetchProducts();
+    fetchProducts()(dispatch);
   }, [refetch]);
 
   const handleClick = (product: Product) => {

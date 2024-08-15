@@ -14,12 +14,15 @@ import { Slider } from "./Slider";
 import useInput from "../../hooks/useInput";
 import { fetchProducts } from "../../state/products/productsActions";
 import { Footer } from "../Footer";
+import { useDispatch } from "react-redux";
 
 export const Home = () => {
   const brandInput = useInput();
   const categoryInput = useInput();
   const minPriceInput = useInput();
   const maxPriceInput = useInput();
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const filters = {
@@ -29,7 +32,7 @@ export const Home = () => {
       max: maxPriceInput.value,
     };
 
-    fetchProducts("", filters);
+    fetchProducts("", filters)(dispatch);
   }, [
     brandInput.value,
     categoryInput.value,

@@ -13,7 +13,7 @@ import { Login } from "./components/Login";
 import { SignUp } from "./components/SignUp";
 import { Box } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import * as settings from "./settings";
 import { login } from "./state/user/userSlice";
@@ -39,8 +39,10 @@ function App() {
     fetchUser();
   }, []);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    fetchProducts();
+    fetchProducts()(dispatch);
   }, []);
 
   return (

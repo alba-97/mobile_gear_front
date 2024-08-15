@@ -12,15 +12,17 @@ import {
   Button,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { useDispatch } from "react-redux";
 
 export const Login = () => {
   const email = useInput();
   const password = useInput();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    loginUser(email.value, password.value);
+    loginUser(email.value, password.value)(dispatch);
     navigate("/");
   };
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Box } from "@chakra-ui/react";
 import { CategoryCard } from "./CategoryCard";
 import {
@@ -22,12 +22,14 @@ export const CategoryGrid = () => {
     event: React.MouseEvent<Element>
   ) => {
     event.stopPropagation();
-    deleteCategory(category.id);
+    deleteCategory(category.id)(dispatch);
     setRefetch(!refetch);
   };
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    fetchCategories();
+    fetchCategories()(dispatch);
   }, [refetch]);
 
   const handleAdd = () => {

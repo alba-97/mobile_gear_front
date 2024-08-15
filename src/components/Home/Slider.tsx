@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Flex, IconButton, Stack } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ProductCard } from "../Product/ProductCard";
 import { fetchDiscountedProducts } from "../../state/products/productsActions";
 import { ProductState } from "@/state/products/productsSlice";
@@ -12,8 +12,10 @@ export const Slider = () => {
   );
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    fetchDiscountedProducts();
+    fetchDiscountedProducts()(dispatch);
   }, []);
 
   const handlePrevSlide = () => {

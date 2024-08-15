@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../state/products/productsActions";
 import { SimpleGrid, Center } from "@chakra-ui/react";
 import { ProductCard } from "./ProductCard";
@@ -7,9 +7,10 @@ import { RootState } from "@/state/store";
 
 export const ProductGrid = () => {
   const products = useSelector((state: RootState) => state.products.products);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchProducts();
+    fetchProducts()(dispatch);
   }, []);
 
   return (

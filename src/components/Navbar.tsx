@@ -19,7 +19,7 @@ import { FaShoppingCart } from "react-icons/fa";
 
 import { Link } from "react-router-dom";
 import useInput from "../hooks/useInput";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { fetchProducts } from "../state/products/productsActions";
 import { useNavigate } from "react-router-dom";
@@ -49,20 +49,22 @@ export const Navbar = () => {
     setShowSearchBar(!showSearchBar);
   };
 
+  const dispatch = useDispatch();
+
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    fetchProducts(searchInput.value);
+    fetchProducts(searchInput.value)(dispatch);
     searchInput.reset();
   };
 
   const handleCategorySelect = (categoryName: string) => {
     categoryInput.setValue(categoryName);
     filters.categoryName = categoryName;
-    fetchProducts("", filters);
+    fetchProducts("", filters)(dispatch);
   };
 
   const handleLogout = () => {
-    logoutUser();
+    logoutUser()(dispatch);
     navigate("/");
   };
 

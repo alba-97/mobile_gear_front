@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "../../state/orders/ordersActions";
 import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 import { RootState } from "@/state/store";
@@ -7,9 +7,10 @@ import { Order } from "@/interfaces/Order";
 
 export const SalesDashboard = () => {
   const orders = useSelector((state: RootState) => state.orders.orders);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchOrders();
+    fetchOrders()(dispatch);
   }, []);
 
   return (

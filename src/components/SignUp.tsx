@@ -14,6 +14,7 @@ import {
   useColorModeValue,
   ButtonGroup,
 } from "@chakra-ui/react";
+import { useDispatch } from "react-redux";
 
 export const SignUp = () => {
   const navigate = useNavigate();
@@ -21,9 +22,11 @@ export const SignUp = () => {
   const email = useInput();
   const password = useInput();
 
+  const dispatch = useDispatch();
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    await registerUser(username.value, email.value, password.value);
+    await registerUser(username.value, email.value, password.value)(dispatch);
     navigate("/login");
   };
 

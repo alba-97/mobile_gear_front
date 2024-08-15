@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, Heading, Text, Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { checkout } from "../../state/checkout/checkoutActions";
@@ -21,8 +21,10 @@ export const CartOrderSummary = () => {
     return total + item.price * item.quantity;
   }, 0);
 
+  const dispatch = useDispatch();
+
   const handleCheckout = () => {
-    checkout(Object.values(items));
+    checkout(Object.values(items))(dispatch);
     clearCart();
     navigate("/payments");
   };

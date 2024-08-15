@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addItemToCart } from "../../state/cart/cartSlice";
 import { fetchProduct } from "../../state/products/productsActions";
 import {
@@ -39,8 +39,10 @@ export const ProductDetail = () => {
     product?.discount &&
     Math.round(product.price * (product.discount / 100 + 1));
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    id && fetchProduct(+id);
+    id && fetchProduct(+id)(dispatch);
   }, [id]);
 
   if (!product || !product.brand) {
