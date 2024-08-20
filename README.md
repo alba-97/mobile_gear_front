@@ -2,12 +2,13 @@
 
 ### Objetivos
 
-En este proyecto de 2 semana creamos una web B2C de productos tecnologicos,orientados a telefonia movil y accesorios.
+En este proyecto de 2 semanas creamos una web B2C de productos tecnologicos, orientados a telefonía móvil y accesorios.
 
 ### Tecnologías y Herramientas
 
 #### Front
-Javascript , React, Vite.js , Redux, Axios , Chakra UI ,CSS .
+
+JavaScript, React, Vite.js, Redux, Axios, Chakra UI, CSS.
 
 ### Funcionalidades
 
@@ -28,6 +29,6 @@ Javascript , React, Vite.js , Redux, Axios , Chakra UI ,CSS .
 para instalar las dependencias desde la carpeta api y client por separado. (mobile_gear_front mobile_gear_back)
 
 - Uso :
-Después de clonar el repositorio y haber instalado las dependencias. Podes correr desde la carpeta client y api por separado:
+  Después de clonar el repositorio y haber instalado las dependencias. Podes correr desde la carpeta client y api por separado:
 
 `npm run dev`
