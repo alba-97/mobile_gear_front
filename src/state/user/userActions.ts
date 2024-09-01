@@ -4,6 +4,7 @@ import { login, logout, register, list } from "./userSlice";
 import * as settings from "../../settings";
 import getHeaders from "../../hooks/getHeaders";
 import { Dispatch } from "@reduxjs/toolkit";
+import { User } from "@/interfaces/User";
 
 export const registerUser =
   (username: string, email: string, password: string) =>
@@ -37,6 +38,14 @@ export const loginUser =
       console.error("Login error:", error);
     }
   };
+
+export const refreshUser = (user: User) => async (dispatch: Dispatch) => {
+  try {
+    await dispatch(login(user));
+  } catch (error) {
+    console.error("Login error:", error);
+  }
+};
 
 export const logoutUser = () => async (dispatch: Dispatch) => {
   try {

@@ -16,10 +16,10 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import * as settings from "./settings";
-import { login } from "./state/user/userSlice";
 import { fetchProducts } from "./state/products/productsActions";
 import getHeaders from "./hooks/getHeaders";
 import { RootState } from "./state/store";
+import { refreshUser } from "./state/user/userActions";
 
 function App() {
   const isAuthenticated = useSelector(
@@ -34,7 +34,7 @@ function App() {
         `${settings.axiosURL}/users/me`,
         getHeaders()
       );
-      await login(user.data);
+      await refreshUser(user.data)(dispatch);
     }
     fetchUser();
   }, []);
