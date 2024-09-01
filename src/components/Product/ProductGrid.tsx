@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../state/products/productsActions";
-import { SimpleGrid, Center } from "@chakra-ui/react";
+import { SimpleGrid, Center, Flex } from "@chakra-ui/react";
 import { ProductCard } from "./ProductCard";
 import { RootState } from "@/state/store";
 

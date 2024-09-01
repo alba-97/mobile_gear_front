@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Flex, IconButton, Stack } from "@chakra-ui/react";
+import { Flex, HStack, IconButton, Stack, VStack } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { ProductCard } from "../Product/ProductCard";
@@ -36,11 +36,11 @@ export const Slider = () => {
         aria-label="Previous Slide"
       />
 
-      <Stack gap="6">
+      <HStack gap="6">
         {products.slice(currentSlide, currentSlide + 3).map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
-      </Stack>
+      </HStack>
 
       <IconButton
         icon={<ChevronRightIcon />}
