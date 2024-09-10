@@ -28,7 +28,11 @@ import { logoutUser } from "../state/user/userActions";
 
 import { RootState } from "@/state/store";
 
-export const Navbar = () => {
+interface INavbarProps {
+  productGridRef: React.RefObject<HTMLDivElement>;
+}
+
+export const Navbar = ({ productGridRef }: INavbarProps) => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
   );
@@ -96,7 +100,12 @@ export const Navbar = () => {
               bg: "#a62b07",
             }}
             padding={3}
-            onClick={() => handleCategorySelect("smartphone")}
+            onClick={() => {
+              productGridRef.current?.scrollIntoView({
+                behavior: "smooth",
+              });
+              handleCategorySelect("smartphone");
+            }}
           >
             Mobile Phones
           </MenuButton>
@@ -109,7 +118,12 @@ export const Navbar = () => {
               bg: "#a62b07",
             }}
             padding={3}
-            onClick={() => handleCategorySelect("tablets")}
+            onClick={() => {
+              productGridRef.current?.scrollIntoView({
+                behavior: "smooth",
+              });
+              handleCategorySelect("tablets");
+            }}
           >
             Tablets
           </MenuButton>
@@ -122,7 +136,12 @@ export const Navbar = () => {
               bg: "#a62b07",
             }}
             padding={3}
-            onClick={() => handleCategorySelect("accesorios")}
+            onClick={() => {
+              productGridRef.current?.scrollIntoView({
+                behavior: "smooth",
+              });
+              handleCategorySelect("accesorios");
+            }}
           >
             Accessories
           </MenuButton>

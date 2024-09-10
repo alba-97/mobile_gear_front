@@ -1,9 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   Box,
   Center,
   Heading,
-  Image,
   Menu,
   MenuList,
   MenuButton,
@@ -16,7 +15,11 @@ import { fetchProducts } from "../../state/products/productsActions";
 import { Footer } from "../Footer";
 import { useDispatch } from "react-redux";
 
-export const Home = () => {
+interface IHomeProps {
+  productGridRef: React.RefObject<HTMLDivElement>;
+}
+
+export const Home = ({ productGridRef }: IHomeProps) => {
   const brandInput = useInput();
   const categoryInput = useInput();
   const minPriceInput = useInput();
@@ -114,8 +117,9 @@ export const Home = () => {
           style={{ paddingLeft: "5px" }}
         />
       </Center>
-
-      <ProductGrid />
+      <div ref={productGridRef}>
+        <ProductGrid />
+      </div>
       <Footer />
     </Box>
   );
