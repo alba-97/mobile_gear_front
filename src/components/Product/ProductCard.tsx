@@ -58,9 +58,7 @@ export const ProductCard = ({ product }: IProductCardProps) => {
       alert("Item is already in the cart");
     } else {
       addItemToCart(item);
-
       setShowAlert(true);
-
       setTimeout(() => setShowAlert(false), 3000);
     }
   };
@@ -85,7 +83,7 @@ export const ProductCard = ({ product }: IProductCardProps) => {
           Product successfully added!
         </Alert>
       )}
-      {product.discount && product.discount > 0 && (
+      {product.discount && product.discount > 0 ? (
         <Badge
           position="absolute"
           top={2}
@@ -96,6 +94,8 @@ export const ProductCard = ({ product }: IProductCardProps) => {
         >
           {product.discount}% off
         </Badge>
+      ) : (
+        ""
       )}
 
       <Image

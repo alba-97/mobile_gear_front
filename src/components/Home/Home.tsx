@@ -1,9 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   Box,
   Center,
   Heading,
-  Image,
   Menu,
   MenuList,
   MenuButton,
@@ -16,7 +15,11 @@ import { fetchProducts } from "../../state/products/productsActions";
 import { Footer } from "../Footer";
 import { useDispatch } from "react-redux";
 
-export const Home = () => {
+interface IHomeProps {
+  productGridRef: React.RefObject<HTMLDivElement>;
+}
+
+export const Home = ({ productGridRef }: IHomeProps) => {
   const brandInput = useInput();
   const categoryInput = useInput();
   const minPriceInput = useInput();
@@ -58,7 +61,7 @@ export const Home = () => {
 
   return (
     <Box backgroundColor="gray.100" minHeight="100vh">
-      <Image
+      <img
         src="https://i.imgur.com/z6Jbhdb.jpg"
         alt="banner"
         width="100%"
@@ -80,7 +83,7 @@ export const Home = () => {
               Samsung
             </MenuItem>
             <MenuItem onClick={() => handleBrandSelect("apple")}>
-              Iphone
+              Apple
             </MenuItem>
           </MenuList>
         </Menu>
@@ -101,11 +104,22 @@ export const Home = () => {
             </MenuItem>
           </MenuList>
         </Menu>
-        <input type="text" placeholder="Min price" {...minPriceInput} />
-        <input type="text" placeholder="Max price" {...maxPriceInput} />
+        <input
+          type="text"
+          placeholder="Min price"
+          {...minPriceInput}
+          style={{ paddingLeft: "5px" }}
+        />
+        <input
+          type="text"
+          placeholder="Max price"
+          {...maxPriceInput}
+          style={{ paddingLeft: "5px" }}
+        />
       </Center>
-
-      <ProductGrid />
+      <div ref={productGridRef}>
+        <ProductGrid />
+      </div>
       <Footer />
     </Box>
   );
