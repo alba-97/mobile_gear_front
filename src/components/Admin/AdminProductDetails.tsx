@@ -3,6 +3,7 @@ import useInput from "../../hooks/useInput";
 import { Box, Button, Input, Textarea } from "@chakra-ui/react";
 import { editProduct } from "../../state/products/productsActions";
 import { Product } from "@/interfaces/Product";
+import { useDispatch } from "react-redux";
 
 interface IAdminProductsDetailsProps {
   selectedProduct: Product;
@@ -21,6 +22,8 @@ export const AdminProductsDetails = ({
   const description = useInput(selectedProduct.description);
   const discount = useInput(`${selectedProduct.discount}`);
 
+  const dispatch = useDispatch();
+
   const handleSaveChanges = () => {
     const productData = {
       id: selectedProduct.id,
@@ -33,7 +36,7 @@ export const AdminProductsDetails = ({
       stock: Number(stock.value),
     };
 
-    editProduct(productData);
+    editProduct(productData)(dispatch);
     setSelectedProduct({ id: undefined });
   };
 

@@ -64,19 +64,21 @@ export const fetchDiscountedProducts = () => async (dispatch: Dispatch) => {
   }
 };
 
-export const addProduct = (productData: Product) => async () => {
-  try {
-    await axios.post(
-      `${settings.axiosURL}/admin/products`,
-      productData,
-      getHeaders()
-    );
-  } catch (error) {
-    console.error("Login error:", error);
-  }
-};
+export const addProduct =
+  (productData: Product) => async (dispatch: Dispatch) => {
+    try {
+      await axios.post(
+        `${settings.axiosURL}/products`,
+        productData,
+        getHeaders()
+      );
+      dispatch(setLoading(false));
+    } catch (error) {
+      console.error("Login error:", error);
+    }
+  };
 
-export const editProduct = (product: Product) => async () => {
+export const editProduct = (product: Product) => async (dispatch: Dispatch) => {
   try {
     const {
       id,
@@ -89,7 +91,7 @@ export const editProduct = (product: Product) => async () => {
       product_img,
     } = product;
     await axios.put(
-      `${settings.axiosURL}/admin/products/${id}`,
+      `${settings.axiosURL}/products/${id}`,
       {
         name,
         description,
@@ -101,6 +103,7 @@ export const editProduct = (product: Product) => async () => {
       },
       getHeaders()
     );
+    dispatch(setLoading(false));
   } catch (error) {
     console.error("edit error: ", error);
   }
@@ -110,7 +113,7 @@ export const deleteProduct =
   (productId: number) => async (dispatch: Dispatch) => {
     try {
       await axios.delete(
-        `${settings.axiosURL}/admin/products/${productId}`,
+        `${settings.axiosURL}/products/${productId}`,
         getHeaders()
       );
       dispatch(deleteProductAction(productId));

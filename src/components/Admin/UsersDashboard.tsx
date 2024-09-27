@@ -17,7 +17,7 @@ export const UsersDashboard = () => {
   }, []);
 
   const handleSwitch = async (id: number) => {
-    await axios.put(`${settings.axiosURL}/admin/users/${id}`, {}, getHeaders());
+    await axios.put(`${settings.axiosURL}/users/${id}`, {}, getHeaders());
     fetchUsers()(dispatch);
   };
 

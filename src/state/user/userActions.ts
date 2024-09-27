@@ -60,7 +60,7 @@ export const logoutUser = () => async (dispatch: Dispatch) => {
 export const fetchUsers = () => async (dispatch: Dispatch) => {
   try {
     const response = await axios.get(
-      `${settings.axiosURL}/admin/users`,
+      `${settings.axiosURL}/users`,
       getHeaders()
     );
     dispatch(list(response.data));

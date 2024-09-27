@@ -8,7 +8,7 @@ export const fetchOrders = () => async (dispatch: Dispatch) => {
   dispatch(setLoading(true));
   try {
     const response = await axios.get(
-      `${settings.axiosURL}/admin/orders`,
+      `${settings.axiosURL}/orders`,
       getHeaders()
     );
     dispatch(setOrders(response.data));

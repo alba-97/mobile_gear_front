@@ -53,14 +53,14 @@ export const AddProducts = ({ setSelectedPanel }: IAddProductsProps) => {
       product_img: product_img.value,
       description: description.value,
       features: features.value,
-      price: parseFloat(price.value),
+      price: +price.value,
       discount: parseInt(discount.value),
-      stock: Number(stock.value),
-      brandId: Number(brand.value),
-      categoryId: Number(category.value),
+      stock: +stock.value,
+      brandId: +brand.value,
+      categoryId: +category.value,
     };
 
-    addProduct(productData);
+    addProduct(productData)(dispatch);
 
     setShowAlert(true);
 
@@ -139,7 +139,12 @@ export const AddProducts = ({ setSelectedPanel }: IAddProductsProps) => {
 
           <FormControl>
             <FormLabel>Brand</FormLabel>
-            <Select id="brand">
+            <Select
+              id="brand"
+              onChange={(e) => {
+                brand.setValue(e.target.value);
+              }}
+            >
               {["", "apple", "samsung"].map((brand, i) => {
                 return (
                   <option value={i} id={`${i}`}>
@@ -152,7 +157,12 @@ export const AddProducts = ({ setSelectedPanel }: IAddProductsProps) => {
 
           <FormControl>
             <FormLabel>Category</FormLabel>
-            <Select id="category">
+            <Select
+              id="category"
+              onChange={(e) => {
+                category.setValue(e.target.value);
+              }}
+            >
               {categories.map((item) => {
                 return (
                   <option value={item.id} id={`${item.id}`}>
