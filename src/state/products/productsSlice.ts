@@ -1,10 +1,10 @@
-import { Product } from "@/interfaces/Product";
+import { ProductResponse } from "@/interfaces/Product";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface ProductState {
-  products: Product[];
-  discountedProducts: Product[];
-  product: Product | null;
+  products: ProductResponse[];
+  discountedProducts: ProductResponse[];
+  product: ProductResponse | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -21,13 +21,16 @@ const productsSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
-    setProducts: (state, action: PayloadAction<Product[]>) => {
+    setProducts: (state, action: PayloadAction<ProductResponse[]>) => {
       state.products = action.payload;
     },
-    setProduct: (state, action: PayloadAction<Product>) => {
+    setProduct: (state, action: PayloadAction<ProductResponse>) => {
       state.product = action.payload;
     },
-    setDiscountedProducts: (state, action: PayloadAction<Product[]>) => {
+    setDiscountedProducts: (
+      state,
+      action: PayloadAction<ProductResponse[]>
+    ) => {
       state.discountedProducts = action.payload;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
@@ -36,10 +39,10 @@ const productsSlice = createSlice({
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
     },
-    addProduct: (state, action: PayloadAction<Product>) => {
+    addProduct: (state, action: PayloadAction<ProductResponse>) => {
       state.products.push(action.payload);
     },
-    editProduct: (state, action: PayloadAction<Product>) => {
+    editProduct: (state, action: PayloadAction<ProductResponse>) => {
       const updatedProduct = action.payload;
       const existingProduct = state.products.find(
         (product) => product.id === updatedProduct.id

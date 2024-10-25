@@ -8,7 +8,7 @@ import {
   addCategory,
 } from "../../state/categories/categoriesActions";
 import { RootState } from "@/state/store";
-import { Category } from "@/interfaces/Product";
+import { CategoryResponse } from "@/interfaces/Product";
 
 export const CategoryGrid = () => {
   const categories = useSelector(
@@ -16,24 +16,23 @@ export const CategoryGrid = () => {
   );
 
   const [refetch, setRefetch] = useState(false);
+  const dispatch = useDispatch();
 
   const handleDelete = (
-    category: Category,
+    category: CategoryResponse,
     event: React.MouseEvent<Element>
   ) => {
     event.stopPropagation();
-    deleteCategory(category.id)(dispatch);
+    category.id && deleteCategory(category.id)(dispatch);
     setRefetch(!refetch);
   };
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     fetchCategories()(dispatch);
   }, [refetch]);
 
   const handleAdd = () => {
-    addCategory("New category");
+    addCategory("New category")(dispatch);
     setRefetch(!refetch);
   };
 

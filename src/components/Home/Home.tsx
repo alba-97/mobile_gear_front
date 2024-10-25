@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import {
   Box,
   Center,
@@ -14,6 +14,7 @@ import useInput from "../../hooks/useInput";
 import { fetchProducts } from "../../state/products/productsActions";
 import { Footer } from "../Footer";
 import { useDispatch } from "react-redux";
+import Banner from "./Banner";
 
 interface IHomeProps {
   productGridRef: React.RefObject<HTMLDivElement>;
@@ -61,12 +62,7 @@ export const Home = ({ productGridRef }: IHomeProps) => {
 
   return (
     <Box backgroundColor="gray.100" minHeight="100vh">
-      <img
-        src="https://i.imgur.com/z6Jbhdb.jpg"
-        alt="banner"
-        width="100%"
-        height="400"
-      />
+      <Banner />
       <Center mt="20" mb="20">
         <Heading>Special Offers</Heading>
       </Center>

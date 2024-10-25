@@ -25,18 +25,14 @@ export const registerUser =
 
 export const loginUser =
   (email: string, password: string) => async (dispatch: Dispatch) => {
-    try {
-      const res = await axios.post(`${settings.axiosURL}/users/login`, {
-        email,
-        password,
-      });
+    const res = await axios.post(`${settings.axiosURL}/users/login`, {
+      email,
+      password,
+    });
 
-      const { token, user } = res.data;
-      localStorage.setItem("jwt", token);
-      await dispatch(login(user));
-    } catch (error) {
-      console.error("Login error:", error);
-    }
+    const { token, user } = res.data;
+    localStorage.setItem("jwt", token);
+    await dispatch(login(user));
   };
 
 export const refreshUser = (user: User) => async (dispatch: Dispatch) => {

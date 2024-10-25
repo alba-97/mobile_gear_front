@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 
 import * as settings from "../../settings";
-import { Product } from "@/interfaces/Product";
+import { Product, ProductForm } from "@/interfaces/Product";
 import {
   setDiscountedProducts,
   setError,
@@ -65,7 +65,7 @@ export const fetchDiscountedProducts = () => async (dispatch: Dispatch) => {
 };
 
 export const addProduct =
-  (productData: Product) => async (dispatch: Dispatch) => {
+  (productData: ProductForm) => async (dispatch: Dispatch) => {
     try {
       await axios.post(
         `${settings.axiosURL}/products`,

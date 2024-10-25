@@ -4,3 +4,14 @@ export interface User {
   email: string;
   is_admin: boolean;
 }
+
+export interface RegisterForm {
+  username: string;
+  email: string;
+  password: string;
+}
+
+export interface LoginForm {
+  email: string;
+  password: string;
+}

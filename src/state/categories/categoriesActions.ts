@@ -4,6 +4,8 @@ import {
   setLoading,
   setError,
   deleteCategory as deleteCategoryAction,
+  editCategory as editCategoryAction,
+  addCategory as addCategoryAction,
 } from "./categoriesSlice";
 import * as settings from "../../settings";
 import getHeaders from "../../hooks/getHeaders";
@@ -24,7 +26,7 @@ export const fetchCategories = () => async (dispatch: Dispatch) => {
   }
 };
 
-export const addCategory = (name: string) => async () => {
+export const addCategory = (name: string) => async (dispatch: Dispatch) => {
   try {
     await axios.post(
       `${settings.axiosURL}/categories`,
@@ -33,13 +35,14 @@ export const addCategory = (name: string) => async () => {
       },
       getHeaders()
     );
+    dispatch(addCategoryAction({ name }));
   } catch (error) {
     console.error("add error:", error);
   }
 };
 
 export const editCategory =
-  (category: { id: number; name: string }) => async () => {
+  (category: { id: number; name: string }) => async (dispatch: Dispatch) => {
     try {
       const { id, name } = category;
       await axios.put(
@@ -49,6 +52,7 @@ export const editCategory =
         },
         getHeaders()
       );
+      dispatch(editCategoryAction(category));
     } catch (error) {
       console.error("edit error: ", error);
     }

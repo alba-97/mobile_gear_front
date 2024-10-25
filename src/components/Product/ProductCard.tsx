@@ -18,10 +18,10 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { addItemToCart } from "../../state/cart/cartSlice";
 import { RootState } from "@/state/store";
-import { Product } from "@/interfaces/Product";
+import { ProductResponse } from "@/interfaces/Product";
 
 interface IProductCardProps {
-  product: Product;
+  product: ProductResponse;
 }
 
 export const ProductCard = ({ product }: IProductCardProps) => {

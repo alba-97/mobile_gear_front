@@ -1,6 +1,6 @@
 import { Grid, Image, Text, IconButton } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { Product } from "@/interfaces/Product";
+import { ProductResponse } from "@/interfaces/Product";
 
 const truncateDescription = (description: string) => {
   if (description) {
@@ -14,8 +14,8 @@ const truncateDescription = (description: string) => {
 };
 
 interface IAdminProductCardProps {
-  product: Product;
-  handleDelete: (product: Product, event: React.MouseEvent) => void;
+  product: ProductResponse;
+  handleDelete: (product: ProductResponse, event: React.MouseEvent) => void;
 }
 
 export const AdminProductCard = ({

@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-import { Flex, HStack, IconButton, Stack, VStack } from "@chakra-ui/react";
+import { Flex, HStack, IconButton } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { ProductCard } from "../Product/ProductCard";
 import { fetchDiscountedProducts } from "../../state/products/productsActions";
-import { ProductState } from "@/state/products/productsSlice";
+import { RootState } from "@/state/store";
 
 export const Slider = () => {
   const products = useSelector(
-    (state: { products: ProductState }) => state.products.discountedProducts
+    (state: RootState) => state.products.discountedProducts
   );
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -34,6 +34,11 @@ export const Slider = () => {
         isDisabled={currentSlide === 0}
         margin="10"
         aria-label="Previous Slide"
+        sx={{
+          _hover: {
+            cursor: currentSlide === 0 ? "default" : "pointer",
+          },
+        }}
       />
 
       <HStack gap="6">
@@ -48,6 +53,11 @@ export const Slider = () => {
         isDisabled={currentSlide >= products.length - 3}
         margin="10"
         aria-label="Next Slide"
+        sx={{
+          _hover: {
+            cursor: currentSlide >= products.length - 3 ? "default" : "pointer",
+          },
+        }}
       />
     </Flex>
   );

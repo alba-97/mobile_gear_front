@@ -1,22 +1,30 @@
-interface Brand {
+export interface BrandResponse {
   id: number;
   name: string;
 }
 
-export interface Category {
+export interface CategoryResponse {
   id: number;
   name: string;
 }
 
-export interface Product {
-  id?: number;
-  name?: string;
-  product_img?: string;
-  description?: string;
-  features?: string;
-  price?: number;
-  discount?: number;
-  stock?: number;
-  brand?: Brand;
-  category?: Category;
+interface BaseProduct {
+  name: string;
+  description: string;
+  price: number;
+  product_img: string;
+  features: string;
+  discount: number;
+  stock: number;
+}
+
+export interface ProductForm extends BaseProduct {
+  brandId: number;
+  categoryId: number;
+}
+
+export interface ProductResponse extends BaseProduct {
+  id: number;
+  brand: BrandResponse;
+  category: CategoryResponse;
 }
