@@ -2,7 +2,7 @@ import * as Yup from "yup";
 
 const AddProductSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
-  product_img: Yup.string().url("Invalid URL"),
+  productImg: Yup.string().url("Invalid URL"),
   description: Yup.string().required("Description is required"),
   features: Yup.string(),
   price: Yup.number()

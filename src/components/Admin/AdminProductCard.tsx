@@ -31,7 +31,7 @@ export const AdminProductCard = ({
       key={product.id}
     >
       <Image
-        src={product.product_img}
+        src={product.productImg}
         alt={product.name}
         boxSize="50px"
         objectFit="cover"

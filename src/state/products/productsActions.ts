@@ -37,7 +37,7 @@ export const addProduct = async (productData: ProductForm) => {
 
 export const editProduct = async (id: number, product: ProductForm) => {
   try {
-    const { name, stock, description, price, discount, features, product_img } =
+    const { name, stock, description, price, discount, features, productImg } =
       product;
     await axios.put(
       `${settings.axiosURL}/products/${id}`,
@@ -48,7 +48,7 @@ export const editProduct = async (id: number, product: ProductForm) => {
         price,
         discount,
         features,
-        product_img,
+        productImg,
       },
       getHeaders()
     );

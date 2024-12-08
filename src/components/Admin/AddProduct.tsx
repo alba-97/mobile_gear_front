@@ -53,7 +53,7 @@ const AddProduct = ({ setSelectedPanel }: IAddProductProps) => {
       <Formik
         initialValues={{
           name: "",
-          product_img: "",
+          productImg: "",
           description: "",
           features: "",
           price: 0,

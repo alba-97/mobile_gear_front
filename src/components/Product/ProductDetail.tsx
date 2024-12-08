@@ -87,7 +87,7 @@ export const ProductDetail = () => {
       id: product.id,
       name: product.name,
       price: product.price,
-      image: product.product_img,
+      image: product.productImg,
       quantity: count > 0 ? count : 1,
     };
 
@@ -137,7 +137,7 @@ export const ProductDetail = () => {
       >
         <Box flex="1">
           <Image
-            src={product.product_img}
+            src={product.productImg}
             alt={product.name}
             borderRadius="md"
           />

@@ -22,7 +22,7 @@ const CreateEditProductForm = ({ mode }: IProductForm) => {
       >
         <Stack spacing={6}>
           <Field value="name" label="Model name" type="text" isRequired />
-          <Field value="product_img" label="Image URL" type="text" />
+          <Field value="productImg" label="Image URL" type="text" />
           <Field
             value="description"
             label="Description"

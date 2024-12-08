@@ -5,7 +5,7 @@ interface BaseProduct {
   name: string;
   description: string;
   price: number;
-  product_img: string;
+  productImg: string;
   features: string;
   discount: number;
   stock: number;
