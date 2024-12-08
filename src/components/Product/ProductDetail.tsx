@@ -22,6 +22,12 @@ import { Image } from "@chakra-ui/react";
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
 import { RootState } from "@/state/store";
+import {
+  setError,
+  setLoading,
+  setProduct,
+} from "@/state/products/productsSlice";
+import { AxiosError } from "axios";
 
 export const ProductDetail = () => {
   const { id } = useParams();
@@ -41,8 +47,20 @@ export const ProductDetail = () => {
 
   const dispatch = useDispatch();
 
+  const fetchData = async () => {
+    if (!id) return;
+    try {
+      const product = await fetchProduct(+id);
+      dispatch(setProduct(product));
+    } catch (error) {
+      if (error instanceof AxiosError) dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
   useEffect(() => {
-    id && fetchProduct(+id)(dispatch);
+    fetchData();
   }, [id]);
 
   if (!product || !product.brand) {
@@ -69,7 +87,7 @@ export const ProductDetail = () => {
       id: product.id,
       name: product.name,
       price: product.price,
-      image: product.product_img,
+      image: product.productImg,
       quantity: count > 0 ? count : 1,
     };
 
@@ -78,10 +96,8 @@ export const ProductDetail = () => {
     if (existingItem) {
       alert("Item is already in the cart");
     } else {
-      addItemToCart(item);
-
+      dispatch(addItemToCart(item));
       setShowAlert(true);
-
       setTimeout(() => setShowAlert(false), 3000);
     }
   };
@@ -121,7 +137,7 @@ export const ProductDetail = () => {
       >
         <Box flex="1">
           <Image
-            src={product.product_img}
+            src={product.productImg}
             alt={product.name}
             borderRadius="md"
           />

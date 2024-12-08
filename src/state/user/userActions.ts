@@ -1,70 +1,40 @@
 import axios from "axios";
-axios.defaults.withCredentials = true;
-import { login, logout, register, list } from "./userSlice";
+import { list } from "./userSlice";
 import * as settings from "../../settings";
 import getHeaders from "../../hooks/getHeaders";
 import { Dispatch } from "@reduxjs/toolkit";
-import { User } from "@/interfaces/User";
 
-export const registerUser =
-  (username: string, email: string, password: string) =>
-  async (dispatch: Dispatch) => {
-    try {
-      const response = await axios.post(`${settings.axiosURL}/users/signup`, {
-        username,
-        email,
-        password,
-      });
+axios.defaults.withCredentials = true;
 
-      const userData = response.data;
-      dispatch(register(userData));
-    } catch (error) {
-      console.error("Register error:", error);
-    }
-  };
+export const registerUser = async (
+  username: string,
+  email: string,
+  password: string
+) => {
+  const { data } = await axios.post(`${settings.axiosURL}/users/signup`, {
+    username,
+    email,
+    password,
+  });
 
-export const loginUser =
-  (email: string, password: string) => async (dispatch: Dispatch) => {
-    try {
-      const res = await axios.post(`${settings.axiosURL}/users/login`, {
-        email,
-        password,
-      });
-
-      const { token, user } = res.data;
-      localStorage.setItem("jwt", token);
-      await dispatch(login(user));
-    } catch (error) {
-      console.error("Login error:", error);
-    }
-  };
-
-export const refreshUser = (user: User) => async (dispatch: Dispatch) => {
-  try {
-    await dispatch(login(user));
-  } catch (error) {
-    console.error("Login error:", error);
-  }
+  return data;
 };
 
-export const logoutUser = () => async (dispatch: Dispatch) => {
-  try {
-    await axios.post(`${settings.axiosURL}/users/logout`);
-    localStorage.clear();
-    dispatch(logout());
-  } catch (error) {
-    console.error("Login error:", error);
-  }
+export const loginUser = async (email: string, password: string) => {
+  const res = await axios.post(`${settings.axiosURL}/users/login`, {
+    email,
+    password,
+  });
+  const { token, user } = res.data;
+  return { token, user };
 };
 
-export const fetchUsers = () => async (dispatch: Dispatch) => {
-  try {
-    const response = await axios.get(
-      `${settings.axiosURL}/admin/users`,
-      getHeaders()
-    );
-    dispatch(list(response.data));
-  } catch (error) {
-    console.error("Fetch error:", error);
-  }
+export const fetchUsers = async () => {
+  const { data } = await axios.get(`${settings.axiosURL}/users`, getHeaders());
+  return data;
+};
+
+export const handleSwitch = async (id: number) => {
+  await axios.put(`${settings.axiosURL}/users/${id}`, {}, getHeaders());
+  fetchUsers();
 };

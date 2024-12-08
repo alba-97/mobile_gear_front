@@ -1,20 +1,8 @@
-import axios, { isAxiosError } from "axios";
-import { setOrders, setLoading, setError } from "./ordersSlice";
+import axios from "axios";
 import * as settings from "../../settings";
 import getHeaders from "../../hooks/getHeaders";
-import { Dispatch } from "@reduxjs/toolkit";
 
-export const fetchOrders = () => async (dispatch: Dispatch) => {
-  dispatch(setLoading(true));
-  try {
-    const response = await axios.get(
-      `${settings.axiosURL}/admin/orders`,
-      getHeaders()
-    );
-    dispatch(setOrders(response.data));
-  } catch (error) {
-    if (isAxiosError(error)) dispatch(setError(error.message));
-  } finally {
-    dispatch(setLoading(false));
-  }
+export const fetchOrders = async () => {
+  const { data } = await axios.get(`${settings.axiosURL}/orders`, getHeaders());
+  return data;
 };

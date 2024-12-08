@@ -18,10 +18,10 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { addItemToCart } from "../../state/cart/cartSlice";
 import { RootState } from "@/state/store";
-import { Product } from "@/interfaces/Product";
+import { ProductResponse } from "@/interfaces/Product";
 
 interface IProductCardProps {
-  product: Product;
+  product: ProductResponse;
 }
 
 export const ProductCard = ({ product }: IProductCardProps) => {
@@ -48,7 +48,7 @@ export const ProductCard = ({ product }: IProductCardProps) => {
       id: product.id,
       name: product.name,
       price: product.price,
-      image: product.product_img,
+      image: product.productImg,
       quantity: 1,
     };
 
@@ -99,7 +99,7 @@ export const ProductCard = ({ product }: IProductCardProps) => {
       )}
 
       <Image
-        src={product.product_img}
+        src={product.productImg}
         alt={product.name}
         objectFit="cover"
         mx="auto"

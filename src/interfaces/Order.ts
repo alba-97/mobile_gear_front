@@ -1,10 +1,10 @@
-import { Product } from "./Product";
-import { User } from "./User";
+import { ProductResponse } from "./Product";
+import { UserResponse } from "./UserResponse";
 
-export interface Order {
+export interface OrderResponse {
   id: number;
   qty: number;
-  product: Product;
-  user: User;
+  product: ProductResponse;
+  user: UserResponse;
   createdAt: string;
 }

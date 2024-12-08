@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import {
   Box,
   Center,
@@ -14,6 +14,8 @@ import useInput from "../../hooks/useInput";
 import { fetchProducts } from "../../state/products/productsActions";
 import { Footer } from "../Footer";
 import { useDispatch } from "react-redux";
+import Banner from "./Banner";
+import { setProducts } from "@/state/products/productsSlice";
 
 interface IHomeProps {
   productGridRef: React.RefObject<HTMLDivElement>;
@@ -27,15 +29,23 @@ export const Home = ({ productGridRef }: IHomeProps) => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const filters = {
-      brandName: brandInput.value,
-      categoryName: categoryInput.value,
-      min: minPriceInput.value,
-      max: maxPriceInput.value,
-    };
+  const fetchData = async () => {
+    try {
+      const filters = {
+        brandName: brandInput.value,
+        categoryName: categoryInput.value,
+        min: minPriceInput.value,
+        max: maxPriceInput.value,
+      };
+      const products = await fetchProducts("", filters);
+      dispatch(setProducts(products));
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
 
-    fetchProducts("", filters)(dispatch);
+  useEffect(() => {
+    fetchData();
   }, [
     brandInput.value,
     categoryInput.value,
@@ -61,12 +71,7 @@ export const Home = ({ productGridRef }: IHomeProps) => {
 
   return (
     <Box backgroundColor="gray.100" minHeight="100vh">
-      <img
-        src="https://i.imgur.com/z6Jbhdb.jpg"
-        alt="banner"
-        width="100%"
-        height="400"
-      />
+      <Banner />
       <Center mt="20" mb="20">
         <Heading>Special Offers</Heading>
       </Center>

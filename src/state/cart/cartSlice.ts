@@ -1,13 +1,13 @@
-import { ICarts } from "@/interfaces/Cart";
+import { ICart } from "@/interfaces/Cart";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface CartState {
-  items: ICarts;
+  items: ICart[];
   totalPrice: number;
 }
 
 const initialState: CartState = {
-  items: {},
+  items: [],
   totalPrice: 0,
 };
 
@@ -21,11 +21,12 @@ const cartSlice = createSlice({
   reducers: {
     addItemToCart: (state, action) => {
       const newItem = action.payload;
-      const existingItem = state.items[newItem.id];
+      const existingItem = state.items.find(
+        (item: ICart) => item.id === newItem.id
+      );
       if (!existingItem) {
-        state.items[newItem.id] = {
-          ...newItem,
-        };
+        let newItems = [...state.items];
+        newItems.push(newItem);
         state.totalPrice += newItem.price;
       } else {
         existingItem.quantity++;
@@ -34,7 +35,7 @@ const cartSlice = createSlice({
     },
     removeItemFromCart: (state, action) => {
       const id = action.payload;
-      const existingItem = state.items[id];
+      const existingItem = state.items.find((item: ICart) => item.id === id);
       if (existingItem) {
         state.totalPrice -= existingItem.price * existingItem.quantity;
         delete state.items[id];
@@ -42,7 +43,7 @@ const cartSlice = createSlice({
     },
     updateQuantity: (state, action) => {
       const { id, quantity } = action.payload;
-      const existingItem = state.items[id];
+      const existingItem = state.items.find((item: ICart) => item.id === id);
       if (existingItem) {
         const quantityDifference = quantity - existingItem.quantity;
         existingItem.quantity = quantity;
@@ -50,7 +51,7 @@ const cartSlice = createSlice({
       }
     },
     clearCart: (state) => {
-      state.items = {};
+      state.items = [];
       state.totalPrice = 0;
     },
   },

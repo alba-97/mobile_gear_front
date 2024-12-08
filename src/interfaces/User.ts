@@ -1,6 +1,17 @@
-export interface User {
+export interface UserResponse {
   id: number | null;
   username: string;
   email: string;
-  is_admin: boolean;
+  isAdmin: boolean;
+}
+
+export interface RegisterForm {
+  username: string;
+  email: string;
+  password: string;
+}
+
+export interface LoginForm {
+  email: string;
+  password: string;
 }

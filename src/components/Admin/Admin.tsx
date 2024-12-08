@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Box, Button, VStack, Flex, Image } from "@chakra-ui/react";
 import { AddIcon, EditIcon, ViewIcon } from "@chakra-ui/icons";
-import { AddProducts } from "./AddProducts";
 import { EditProducts } from "./EditProducts";
 import { SalesDashboard } from "./SalesDashboard";
 import { UsersDashboard } from "./UsersDashboard";
 import { EditCategories } from "./EditCategories";
+import AddProduct from "./AddProduct";
 
 export const Admin = () => {
   const [selectedPanel, setSelectedPanel] = useState<string>();
@@ -61,7 +61,7 @@ export const Admin = () => {
       </Box>
       <Box pl={16} flex="1">
         {selectedPanel === "add-product" && (
-          <AddProducts setSelectedPanel={setSelectedPanel} />
+          <AddProduct setSelectedPanel={setSelectedPanel} />
         )}
         {selectedPanel === "edit-product" && <EditProducts />}
         {selectedPanel === "view-sales" && <SalesDashboard />}

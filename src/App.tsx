@@ -19,14 +19,19 @@ import * as settings from "./settings";
 import { fetchProducts } from "./state/products/productsActions";
 import getHeaders from "./hooks/getHeaders";
 import { RootState } from "./state/store";
-import { refreshUser } from "./state/user/userActions";
+import { login } from "./state/user/userSlice";
+import {
+  setError,
+  setLoading,
+  setProducts,
+} from "./state/products/productsSlice";
 
 function App() {
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
   );
 
-  const is_admin = useSelector((state: RootState) => state.user.is_admin);
+  const isAdmin = useSelector((state: RootState) => state.user.isAdmin);
 
   useEffect(() => {
     async function fetchUser() {
@@ -34,15 +39,27 @@ function App() {
         `${settings.axiosURL}/users/me`,
         getHeaders()
       );
-      await refreshUser(user.data)(dispatch);
+      await dispatch(login(user.data));
     }
     fetchUser();
   }, []);
 
   const dispatch = useDispatch();
 
+  const fetchData = async () => {
+    dispatch(setLoading(true));
+    try {
+      const products = await fetchProducts();
+      dispatch(setProducts(products));
+      dispatch(setLoading(false));
+    } catch (error) {
+      if (error instanceof Error) dispatch(setError(error.message));
+    }
+    dispatch(setLoading(false));
+  };
+
   useEffect(() => {
-    fetchProducts()(dispatch);
+    fetchData();
   }, []);
 
   const productGridRef = useRef<HTMLDivElement | null>(null);
@@ -75,7 +92,7 @@ function App() {
                 <Route path="/order-history" element={<OrderHistory />} />
               </>
             )}
-            {is_admin && (
+            {isAdmin && (
               <>
                 <Route path="/admin" element={<Admin />} />
               </>

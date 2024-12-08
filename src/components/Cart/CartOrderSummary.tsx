@@ -6,6 +6,12 @@ import { checkout } from "../../state/checkout/checkoutActions";
 import { clearCart } from "../../state/cart/cartSlice";
 import { RootState } from "@/state/store";
 import { ICart } from "@/interfaces/Cart";
+import {
+  checkoutFailure,
+  checkoutRequest,
+  checkoutSuccess,
+} from "@/state/checkout/checkoutSlice";
+import { isAxiosError } from "axios";
 
 export const CartOrderSummary = () => {
   const navigate = useNavigate();
@@ -16,17 +22,23 @@ export const CartOrderSummary = () => {
   const checkoutState = useSelector((state: RootState) => state.checkout);
   const deliveryAmount = 1000;
 
-  const subtotal = Object.values(items).reduce((total: number, _item) => {
-    const item = _item as ICart;
+  const subtotal = items.reduce((total: number, item: ICart) => {
     return total + item.price * item.quantity;
   }, 0);
 
   const dispatch = useDispatch();
 
-  const handleCheckout = () => {
-    checkout(Object.values(items))(dispatch);
-    clearCart();
-    navigate("/payments");
+  const handleCheckout = async () => {
+    try {
+      dispatch(checkoutRequest());
+      await checkout(Object.values(items));
+      dispatch(checkoutSuccess());
+    } catch (error) {
+      if (isAxiosError(error)) dispatch(checkoutFailure(error.message));
+    } finally {
+      clearCart();
+      navigate("/payments");
+    }
   };
 
   useEffect(() => {

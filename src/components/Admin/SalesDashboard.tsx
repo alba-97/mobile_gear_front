@@ -3,14 +3,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "../../state/orders/ordersActions";
 import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 import { RootState } from "@/state/store";
-import { Order } from "@/interfaces/Order";
+import { setError, setLoading, setOrders } from "@/state/orders/ordersSlice";
+import { isAxiosError } from "axios";
+import { OrderResponse } from "@/interfaces/Order";
 
 export const SalesDashboard = () => {
   const orders = useSelector((state: RootState) => state.orders.orders);
   const dispatch = useDispatch();
 
+  const fetchData = async () => {
+    try {
+      dispatch(setLoading(true));
+      const data = await fetchOrders();
+      dispatch(setOrders(data));
+    } catch (error) {
+      if (isAxiosError(error)) dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
   useEffect(() => {
-    fetchOrders()(dispatch);
+    fetchData();
   }, []);
 
   return (
@@ -27,7 +41,7 @@ export const SalesDashboard = () => {
         </Thead>
 
         <Tbody>
-          {orders.map((order: Order) => {
+          {orders.map((order: OrderResponse) => {
             return (
               <Tr>
                 <Td>{order.id}</Td>

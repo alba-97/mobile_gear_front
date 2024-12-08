@@ -3,35 +3,63 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../state/products/productsActions";
 import { Box } from "@chakra-ui/react";
 import { AdminProductCard } from "./AdminProductCard";
-import { AdminProductsDetails } from "./AdminProductDetails";
+import { EditProduct } from "./EditProduct";
+import { ProductResponse } from "@/interfaces/Product";
+import { RootState } from "@/state/store";
+import {
+  deleteProduct as deleteProductAction,
+  setError,
+  setLoading,
+  setProducts,
+} from "@/state/products/productsSlice";
 import { deleteProduct } from "../../state/products/productsActions";
-import { ProductState } from "@/state/products/productsSlice";
-import { Product } from "@/interfaces/Product";
+import { AxiosError } from "axios";
 
 export const AdminProductsGrid = () => {
-  const products = useSelector(
-    (state: { products: ProductState }) => state.products.products
-  );
-  const [selectedProduct, setSelectedProduct] = React.useState<Product>({});
+  const products = useSelector((state: RootState) => state.products.products);
+  const [selectedProduct, setSelectedProduct] =
+    useState<ProductResponse | null>();
   const [refetch, setRefetch] = useState(false);
 
-  const handleDelete = (product: Product, event: React.MouseEvent<Element>) => {
+  const handleDelete = async (
+    product: ProductResponse,
+    event: React.MouseEvent<Element>
+  ) => {
     event.stopPropagation();
-    product.id && deleteProduct(product.id)(dispatch);
-    setRefetch(!refetch);
+    if (!product.id) return;
+    try {
+      await deleteProduct(product.id);
+    } catch (error) {
+      console.error("delete error: ", error);
+    } finally {
+      dispatch(deleteProductAction(product.id));
+      setRefetch(!refetch);
+    }
   };
 
   const dispatch = useDispatch();
 
+  const fetchData = async () => {
+    dispatch(setLoading(true));
+    try {
+      const products = await fetchProducts();
+      dispatch(setProducts(products));
+    } catch (error) {
+      if (error instanceof AxiosError) dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
   useEffect(() => {
-    fetchProducts()(dispatch);
+    fetchData();
   }, [refetch]);
 
-  const handleClick = (product: Product) => {
+  const handleClick = (product: ProductResponse) => {
     setSelectedProduct(product);
   };
 
-  return !selectedProduct.id ? (
+  return !selectedProduct?.id ? (
     <Box p="5">
       {products.map((product) => {
         return (
@@ -48,7 +76,7 @@ export const AdminProductsGrid = () => {
       })}
     </Box>
   ) : (
-    <AdminProductsDetails
+    <EditProduct
       selectedProduct={selectedProduct}
       setSelectedProduct={setSelectedProduct}
     />
