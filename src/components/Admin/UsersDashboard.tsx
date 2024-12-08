@@ -2,9 +2,6 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers, handleSwitch } from "../../state/user/userActions";
 import { Link, Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
-import axios from "axios";
-import * as settings from "../../settings";
-import getHeaders from "../../hooks/getHeaders";
 import { RootState } from "@/state/store";
 import { list } from "@/state/user/userSlice";
 
