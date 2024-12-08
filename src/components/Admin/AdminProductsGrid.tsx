@@ -4,9 +4,16 @@ import { fetchProducts } from "../../state/products/productsActions";
 import { Box } from "@chakra-ui/react";
 import { AdminProductCard } from "./AdminProductCard";
 import { EditProduct } from "./EditProduct";
-import { deleteProduct } from "../../state/products/productsActions";
 import { ProductResponse } from "@/interfaces/Product";
 import { RootState } from "@/state/store";
+import {
+  deleteProduct as deleteProductAction,
+  setError,
+  setLoading,
+  setProducts,
+} from "@/state/products/productsSlice";
+import { deleteProduct } from "../../state/products/productsActions";
+import { AxiosError } from "axios";
 
 export const AdminProductsGrid = () => {
   const products = useSelector((state: RootState) => state.products.products);
@@ -14,19 +21,38 @@ export const AdminProductsGrid = () => {
     useState<ProductResponse | null>();
   const [refetch, setRefetch] = useState(false);
 
-  const handleDelete = (
+  const handleDelete = async (
     product: ProductResponse,
     event: React.MouseEvent<Element>
   ) => {
     event.stopPropagation();
-    product.id && deleteProduct(product.id)(dispatch);
-    setRefetch(!refetch);
+    if (!product.id) return;
+    try {
+      await deleteProduct(product.id);
+    } catch (error) {
+      console.error("delete error: ", error);
+    } finally {
+      dispatch(deleteProductAction(product.id));
+      setRefetch(!refetch);
+    }
   };
 
   const dispatch = useDispatch();
 
+  const fetchData = async () => {
+    dispatch(setLoading(true));
+    try {
+      const products = await fetchProducts();
+      dispatch(setProducts(products));
+    } catch (error) {
+      if (error instanceof AxiosError) dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
   useEffect(() => {
-    fetchProducts()(dispatch);
+    fetchData();
   }, [refetch]);
 
   const handleClick = (product: ProductResponse) => {

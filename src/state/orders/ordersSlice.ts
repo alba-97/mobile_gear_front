@@ -1,8 +1,8 @@
-import { Order } from "@/interfaces/Order";
+import { OrderResponse } from "@/interfaces/Order";
 import { createSlice } from "@reduxjs/toolkit";
 
 interface OrderState {
-  orders: Order[];
+  orders: OrderResponse[];
   isLoading: boolean;
   error: string | null;
 }

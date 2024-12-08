@@ -4,13 +4,31 @@ import { fetchProducts } from "../../state/products/productsActions";
 import { SimpleGrid, Center } from "@chakra-ui/react";
 import { ProductCard } from "./ProductCard";
 import { RootState } from "@/state/store";
+import {
+  setError,
+  setLoading,
+  setProducts,
+} from "@/state/products/productsSlice";
+import { AxiosError } from "axios";
 
 export const ProductGrid = () => {
   const products = useSelector((state: RootState) => state.products.products);
   const dispatch = useDispatch();
 
+  const fetchData = async () => {
+    dispatch(setLoading(true));
+    try {
+      const products = await fetchProducts();
+      dispatch(setProducts(products));
+    } catch (error) {
+      if (error instanceof AxiosError) dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
   useEffect(() => {
-    fetchProducts()(dispatch);
+    fetchData();
   }, []);
 
   return (

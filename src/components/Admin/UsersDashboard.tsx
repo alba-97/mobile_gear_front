@@ -1,25 +1,30 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers } from "../../state/user/userActions";
+import { fetchUsers, handleSwitch } from "../../state/user/userActions";
 import { Link, Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 import axios from "axios";
 import * as settings from "../../settings";
 import getHeaders from "../../hooks/getHeaders";
 import { RootState } from "@/state/store";
+import { list } from "@/state/user/userSlice";
 
 export const UsersDashboard = () => {
   const users = useSelector((state: RootState) => state.user.users);
   const admin = useSelector((state: RootState) => state.user.userData);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    fetchUsers()(dispatch);
-  }, []);
-
-  const handleSwitch = async (id: number) => {
-    await axios.put(`${settings.axiosURL}/users/${id}`, {}, getHeaders());
-    fetchUsers()(dispatch);
+  const fetchData = async () => {
+    try {
+      const users = await fetchUsers();
+      dispatch(list(users));
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div>

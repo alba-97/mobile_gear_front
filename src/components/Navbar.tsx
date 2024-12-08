@@ -24,9 +24,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../state/products/productsActions";
 import { useNavigate } from "react-router-dom";
 
-import { logoutUser } from "../state/user/userActions";
-
 import { RootState } from "@/state/store";
+import { logout } from "@/state/user/userSlice";
+import { setProducts } from "@/state/products/productsSlice";
 
 interface INavbarProps {
   productGridRef: React.RefObject<HTMLDivElement>;
@@ -55,20 +55,23 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
 
   const dispatch = useDispatch();
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
+  const handleSearchSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    fetchProducts(searchInput.value)(dispatch);
+    const products = await fetchProducts(searchInput.value);
+    dispatch(setProducts(products));
     searchInput.reset();
   };
 
-  const handleCategorySelect = (categoryName: string) => {
+  const handleCategorySelect = async (categoryName: string) => {
     categoryInput.setValue(categoryName);
     filters.categoryName = categoryName;
-    fetchProducts("", filters)(dispatch);
+    const products = await fetchProducts("", filters);
+    dispatch(setProducts(products));
   };
 
   const handleLogout = () => {
-    logoutUser()(dispatch);
+    localStorage.clear();
+    dispatch(logout());
     navigate("/");
   };
 

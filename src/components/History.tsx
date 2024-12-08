@@ -3,7 +3,7 @@ import axios from "axios";
 import * as settings from "../settings";
 import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 import getHeaders from "../hooks/getHeaders";
-import { Order } from "@/interfaces/Order";
+import { OrderResponse } from "@/interfaces/OrderResponse";
 
 export const History = () => {
   const [history, setHistory] = useState([]);
@@ -31,7 +31,7 @@ export const History = () => {
       </Thead>
 
       <Tbody>
-        {history.map((order: Order) => {
+        {history.map((order: OrderResponse) => {
           return (
             <Tr key={order.id}>
               <Td>{order.product.name}</Td>

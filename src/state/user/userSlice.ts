@@ -1,12 +1,12 @@
-import { User } from "@/interfaces/User";
+import { UserResponse } from "@/interfaces/UserResponse";
 import { createSlice } from "@reduxjs/toolkit";
 
 interface UserState {
   isAuthenticated: boolean;
-  userData: User;
+  userData: UserResponse;
   is_admin: boolean;
   cookie: {};
-  users: User[];
+  users: UserResponse[];
 }
 
 const initialState: UserState = {

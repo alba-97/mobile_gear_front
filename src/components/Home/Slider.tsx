@@ -5,6 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { ProductCard } from "../Product/ProductCard";
 import { fetchDiscountedProducts } from "../../state/products/productsActions";
 import { RootState } from "@/state/store";
+import {
+  setDiscountedProducts,
+  setError,
+  setLoading,
+} from "@/state/products/productsSlice";
+import { AxiosError } from "axios";
 
 export const Slider = () => {
   const products = useSelector(
@@ -14,8 +20,20 @@ export const Slider = () => {
 
   const dispatch = useDispatch();
 
+  const fetchData = async () => {
+    dispatch(setLoading(true));
+    try {
+      const products = await fetchDiscountedProducts();
+      dispatch(setDiscountedProducts(products));
+    } catch (error) {
+      if (error instanceof AxiosError) dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
   useEffect(() => {
-    fetchDiscountedProducts()(dispatch);
+    fetchData();
   }, []);
 
   const handlePrevSlide = () => {

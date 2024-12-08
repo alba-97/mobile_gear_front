@@ -4,7 +4,8 @@ import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import useInput from "../../hooks/useInput";
 
 import { editCategory } from "../../state/categories/categoriesActions";
-import { CategoryResponse } from "@/interfaces/Product";
+import { editCategory as editCategoryAction } from "../../state/categories/categoriesSlice";
+import { CategoryResponse } from "@/interfaces/Category";
 import { useDispatch } from "react-redux";
 
 interface ICategoryCardProps {
@@ -32,10 +33,16 @@ export const CategoryCard = ({
 
   const dispatch = useDispatch();
 
-  const handleSubmit = (id: number) => {
+  const handleSubmit = async (id: number) => {
     setIsEditing(false);
-    editCategory({ id, name: newCategory.value })(dispatch);
-    setRefetch(!refetch);
+    try {
+      await editCategory(id, newCategory.value);
+      dispatch(editCategoryAction({ id, name: newCategory.value }));
+    } catch (error) {
+      console.error("edit error: ", error);
+    } finally {
+      setRefetch(!refetch);
+    }
   };
 
   return (
@@ -47,9 +54,7 @@ export const CategoryCard = ({
       key={category.id}
     >
       {isEditing ? (
-        <>
-          <Input {...newCategory}></Input>
-        </>
+        <Input {...newCategory}></Input>
       ) : (
         <Text fontWeight="bold">{category.name}</Text>
       )}

@@ -1,12 +1,5 @@
-export interface BrandResponse {
-  id: number;
-  name: string;
-}
-
-export interface CategoryResponse {
-  id: number;
-  name: string;
-}
+import { BrandResponse } from "./Brand";
+import { CategoryResponse } from "./Category";
 
 interface BaseProduct {
   name: string;

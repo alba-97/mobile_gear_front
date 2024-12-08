@@ -8,7 +8,16 @@ import {
   addCategory,
 } from "../../state/categories/categoriesActions";
 import { RootState } from "@/state/store";
-import { CategoryResponse } from "@/interfaces/Product";
+import { CategoryResponse } from "@/interfaces/Category";
+import {
+  deleteCategory as deleteCategoryAction,
+  addCategory as addCategoryAction,
+  setCategories,
+  setError,
+  setLoading,
+} from "../../state/categories/categoriesSlice";
+
+import { AxiosError } from "axios";
 
 export const CategoryGrid = () => {
   const categories = useSelector(
@@ -23,16 +32,41 @@ export const CategoryGrid = () => {
     event: React.MouseEvent<Element>
   ) => {
     event.stopPropagation();
-    category.id && deleteCategory(category.id)(dispatch);
-    setRefetch(!refetch);
+    if (!category.id) return;
+    try {
+      deleteCategory(category.id);
+      dispatch(deleteCategoryAction(category.id));
+    } catch (error) {
+      console.error("delete error: ", error);
+    } finally {
+      setRefetch(!refetch);
+    }
+  };
+
+  const fetchData = async () => {
+    dispatch(setLoading(true));
+    try {
+      const categories = await fetchCategories();
+      dispatch(setCategories(categories));
+    } catch (error) {
+      if (error instanceof AxiosError) dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
 
   useEffect(() => {
-    fetchCategories()(dispatch);
+    fetchData();
   }, [refetch]);
 
-  const handleAdd = () => {
-    addCategory("New category")(dispatch);
+  const handleAdd = async () => {
+    try {
+      const name = "New category";
+      addCategory(name);
+      dispatch(addCategoryAction({ name }));
+    } catch (error) {
+      console.error("add error: ", error);
+    }
     setRefetch(!refetch);
   };
 

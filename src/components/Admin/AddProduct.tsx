@@ -11,19 +11,39 @@ import { Formik, FormikHelpers } from "formik";
 import AddProductSchema from "@/schemas/AddProductSchema";
 import CreateEditProductForm from "./ProductForm";
 import { ProductForm } from "@/interfaces/Product";
+import { setError, setLoading } from "@/state/products/productsSlice";
+import { setCategories } from "@/state/categories/categoriesSlice";
+import { AxiosError } from "axios";
 
 const AddProduct = ({ setSelectedPanel }: IAddProductProps) => {
   const dispatch = useDispatch();
 
+  const fetchData = async () => {
+    dispatch(setLoading(true));
+    try {
+      const categories = await fetchCategories();
+      dispatch(setCategories(categories));
+    } catch (error) {
+      if (error instanceof AxiosError) dispatch(setError(error.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
   useEffect(() => {
-    fetchCategories()(dispatch);
+    fetchData();
   }, []);
 
   const handleSubmit = async (
     values: ProductForm,
     { setSubmitting }: FormikHelpers<ProductForm>
   ) => {
-    await addProduct(values)(dispatch);
+    try {
+      await addProduct(values);
+    } catch (error) {
+      console.error("Login error:", error);
+    }
+    dispatch(setLoading(false));
     setSelectedPanel("edit-product");
     setSubmitting(false);
   };

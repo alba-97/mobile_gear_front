@@ -7,9 +7,10 @@ import { Box, Stack, Button, useColorModeValue } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { Form, Formik, FormikHelpers } from "formik";
 import LoginSchema from "@/schemas/LoginSchema";
-import { LoginForm } from "@/interfaces/User";
+import { LoginForm } from "@/interfaces/UserResponse";
 import Field from "./Input/Field";
 import { AxiosError } from "axios";
+import { login } from "@/state/user/userSlice";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -20,7 +21,9 @@ export const Login = () => {
     { setSubmitting }: FormikHelpers<LoginForm>
   ) => {
     try {
-      await loginUser(values.email, values.password)(dispatch);
+      const { token, user } = await loginUser(values.email, values.password);
+      localStorage.setItem("jwt", token);
+      await dispatch(login(user));
       navigate("/");
     } catch (error) {
       if (error instanceof AxiosError) {

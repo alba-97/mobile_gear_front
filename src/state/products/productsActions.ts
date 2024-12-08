@@ -1,95 +1,44 @@
-import axios, { AxiosError } from "axios";
-
+import axios from "axios";
 import * as settings from "../../settings";
-import { Product, ProductForm } from "@/interfaces/Product";
-import {
-  setDiscountedProducts,
-  setError,
-  setLoading,
-  setProduct,
-  setProducts,
-  deleteProduct as deleteProductAction,
-} from "./productsSlice";
-import { Dispatch } from "redux";
+import { ProductResponse, ProductForm } from "@/interfaces/Product";
 import getHeaders from "@/hooks/getHeaders";
 
-export const fetchProducts =
-  (searchTerm: string = "", filters = {}) =>
-  async (dispatch: Dispatch) => {
-    dispatch(setLoading(true));
-    try {
-      const response = await axios.get<Product[]>(
-        `${settings.axiosURL}/products`,
-        {
-          params: {
-            ...filters,
-            modelName: searchTerm,
-          },
-        }
-      );
-      dispatch(setProducts(response.data));
-    } catch (error) {
-      if (error instanceof AxiosError) dispatch(setError(error.message));
-    } finally {
-      dispatch(setLoading(false));
+export const fetchProducts = async (
+  searchTerm: string = "",
+  filters = {}
+): Promise<ProductResponse[]> => {
+  const { data } = await axios.get<ProductResponse[]>(
+    `${settings.axiosURL}/products`,
+    {
+      params: {
+        ...filters,
+        modelName: searchTerm,
+      },
     }
-  };
-
-export const fetchProduct =
-  (productId: number) => async (dispatch: Dispatch) => {
-    try {
-      const response = await axios.get(
-        `${settings.axiosURL}/products/${productId}`
-      );
-      dispatch(setProduct(response.data));
-    } catch (error) {
-      if (error instanceof AxiosError) dispatch(setError(error.message));
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
-export const fetchDiscountedProducts = () => async (dispatch: Dispatch) => {
-  dispatch(setLoading(true));
-  try {
-    const response = await axios.get(
-      `${settings.axiosURL}/products/discounted`
-    );
-
-    dispatch(setDiscountedProducts(response.data));
-  } catch (error) {
-    if (error instanceof AxiosError) dispatch(setError(error.message));
-  } finally {
-    dispatch(setLoading(false));
-  }
+  );
+  return data;
 };
 
-export const addProduct =
-  (productData: ProductForm) => async (dispatch: Dispatch) => {
-    try {
-      await axios.post(
-        `${settings.axiosURL}/products`,
-        productData,
-        getHeaders()
-      );
-      dispatch(setLoading(false));
-    } catch (error) {
-      console.error("Login error:", error);
-    }
-  };
+export const fetchProduct = async (productId: number) => {
+  const { data } = await axios.get(
+    `${settings.axiosURL}/products/${productId}`
+  );
+  return data;
+};
 
-export const editProduct = (product: Product) => async (dispatch: Dispatch) => {
+export const fetchDiscountedProducts = async () => {
+  const { data } = await axios.get(`${settings.axiosURL}/products/discounted`);
+  return data;
+};
+
+export const addProduct = async (productData: ProductForm) => {
+  await axios.post(`${settings.axiosURL}/products`, productData, getHeaders());
+};
+
+export const editProduct = async (id: number, product: ProductForm) => {
   try {
-    const {
-      id,
-      name,
-      stock,
-      description,
-      price,
-      discount,
-      features,
-      product_img,
-    } = product;
+    const { name, stock, description, price, discount, features, product_img } =
+      product;
     await axios.put(
       `${settings.axiosURL}/products/${id}`,
       {
@@ -103,21 +52,14 @@ export const editProduct = (product: Product) => async (dispatch: Dispatch) => {
       },
       getHeaders()
     );
-    dispatch(setLoading(false));
   } catch (error) {
     console.error("edit error: ", error);
   }
 };
 
-export const deleteProduct =
-  (productId: number) => async (dispatch: Dispatch) => {
-    try {
-      await axios.delete(
-        `${settings.axiosURL}/products/${productId}`,
-        getHeaders()
-      );
-      dispatch(deleteProductAction(productId));
-    } catch (error) {
-      console.error("delete error: ", error);
-    }
-  };
+export const deleteProduct = async (productId: number) => {
+  await axios.delete(
+    `${settings.axiosURL}/products/${productId}`,
+    getHeaders()
+  );
+};

@@ -15,6 +15,7 @@ import { fetchProducts } from "../../state/products/productsActions";
 import { Footer } from "../Footer";
 import { useDispatch } from "react-redux";
 import Banner from "./Banner";
+import { setProducts } from "@/state/products/productsSlice";
 
 interface IHomeProps {
   productGridRef: React.RefObject<HTMLDivElement>;
@@ -28,15 +29,23 @@ export const Home = ({ productGridRef }: IHomeProps) => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const filters = {
-      brandName: brandInput.value,
-      categoryName: categoryInput.value,
-      min: minPriceInput.value,
-      max: maxPriceInput.value,
-    };
+  const fetchData = async () => {
+    try {
+      const filters = {
+        brandName: brandInput.value,
+        categoryName: categoryInput.value,
+        min: minPriceInput.value,
+        max: maxPriceInput.value,
+      };
+      const products = await fetchProducts("", filters);
+      dispatch(setProducts(products));
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
 
-    fetchProducts("", filters)(dispatch);
+  useEffect(() => {
+    fetchData();
   }, [
     brandInput.value,
     categoryInput.value,

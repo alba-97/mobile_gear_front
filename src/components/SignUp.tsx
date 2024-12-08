@@ -13,25 +13,30 @@ import {
 import { useDispatch } from "react-redux";
 import { Form, Formik, FormikHelpers } from "formik";
 import Field from "./Input/Field";
-import { RegisterForm } from "@/interfaces/User";
+import { RegisterForm } from "@/interfaces/UserResponse";
 import RegisterSchema from "@/schemas/RegisterSchema";
+import { register } from "@/state/user/userSlice";
 
 export const SignUp = () => {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
   const handleRegister = async (
     values: RegisterForm,
     { setSubmitting }: FormikHelpers<RegisterForm>
   ) => {
-    await registerUser(
-      values.username,
-      values.email,
-      values.password
-    )(dispatch);
-    navigate("/login");
-    setSubmitting(false);
+    try {
+      const data = await registerUser(
+        values.username,
+        values.email,
+        values.password
+      );
+      dispatch(register(data));
+      navigate("/login");
+      setSubmitting(false);
+    } catch (error) {
+      console.error("Register error:", error);
+    }
   };
 
   return (
