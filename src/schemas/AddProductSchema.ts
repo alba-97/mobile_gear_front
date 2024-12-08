@@ -11,7 +11,7 @@ const AddProductSchema = Yup.object().shape({
   discount: Yup.number()
     .min(0, "Discount can't be negative")
     .max(100, "Discount can't exceed 100%"),
-  stock: Yup.number().integer("Stock must be an integer").nullable(),
+  stock: Yup.number().integer("Stock must be an integer").required(),
   categoryId: Yup.number()
     .integer("Category is required")
     .required("Category is required"),

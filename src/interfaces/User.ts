@@ -2,7 +2,7 @@ export interface UserResponse {
   id: number | null;
   username: string;
   email: string;
-  is_admin: boolean;
+  isAdmin: boolean;
 }
 
 export interface RegisterForm {

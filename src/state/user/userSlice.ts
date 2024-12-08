@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 interface UserState {
   isAuthenticated: boolean;
   userData: UserResponse;
-  is_admin: boolean;
+  isAdmin: boolean;
   cookie: {};
   users: UserResponse[];
 }
@@ -15,9 +15,9 @@ const initialState: UserState = {
     id: null,
     email: "",
     username: "",
-    is_admin: false,
+    isAdmin: false,
   },
-  is_admin: false,
+  isAdmin: false,
   cookie: {},
   users: [],
 };
@@ -29,17 +29,17 @@ const userSlice = createSlice({
     register: (state, action) => {
       state.isAuthenticated = true;
       state.userData = action.payload;
-      state.is_admin = action.payload.is_admin;
+      state.isAdmin = action.payload.isAdmin;
     },
     login: (state, action) => {
       state.isAuthenticated = true;
       state.userData = action.payload;
-      state.is_admin = action.payload.is_admin;
+      state.isAdmin = action.payload.isAdmin;
     },
     logout: (state) => {
       state.isAuthenticated = false;
       state.userData = initialState.userData;
-      state.is_admin = false;
+      state.isAdmin = false;
     },
     list: (state, action) => {
       state.users = action.payload;

@@ -14,6 +14,7 @@ import { ProductForm } from "@/interfaces/Product";
 import { setError, setLoading } from "@/state/products/productsSlice";
 import { setCategories } from "@/state/categories/categoriesSlice";
 import { AxiosError } from "axios";
+import { fromFormToProductData } from "@/utils/product/fromFormToAddProductData";
 
 const AddProduct = ({ setSelectedPanel }: IAddProductProps) => {
   const dispatch = useDispatch();
@@ -39,9 +40,10 @@ const AddProduct = ({ setSelectedPanel }: IAddProductProps) => {
     { setSubmitting }: FormikHelpers<ProductForm>
   ) => {
     try {
-      await addProduct(values);
+      const data = fromFormToProductData(values);
+      await addProduct(data);
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("Creation error:", error);
     }
     dispatch(setLoading(false));
     setSelectedPanel("edit-product");

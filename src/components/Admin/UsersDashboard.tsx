@@ -43,7 +43,7 @@ export const UsersDashboard = () => {
                 <Td>{user.username}</Td>
                 <Td>{user.email}</Td>
                 <Td>
-                  {user.is_admin ? "Admin " : "User "}
+                  {user.isAdmin ? "Admin " : "User "}
                   {admin.id != user.id && (
                     <Link
                       onClick={() => {

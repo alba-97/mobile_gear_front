@@ -37,7 +37,7 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
     (state: RootState) => state.user.isAuthenticated
   );
   const userData = useSelector((state: RootState) => state.user.userData);
-  const is_admin = useSelector((state: RootState) => state.user.is_admin);
+  const isAdmin = useSelector((state: RootState) => state.user.isAdmin);
   const categoryInput = useInput();
 
   const filters = {
@@ -215,7 +215,7 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
             <MenuItem as={Link} to="/history">
               History
             </MenuItem>
-            {is_admin ? (
+            {isAdmin ? (
               <MenuItem as={Link} to="/admin">
                 My dashboard
               </MenuItem>

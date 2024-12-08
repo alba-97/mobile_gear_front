@@ -1,7 +1,7 @@
 import { BrandResponse } from "./Brand";
 import { CategoryResponse } from "./Category";
 
-interface BaseProduct {
+export interface ProductForm {
   name: string;
   description: string;
   price: number;
@@ -9,15 +9,31 @@ interface BaseProduct {
   features: string;
   discount: number;
   stock: number;
-}
-
-export interface ProductForm extends BaseProduct {
   brandId: number;
   categoryId: number;
 }
 
-export interface ProductResponse extends BaseProduct {
+export interface ProductResponse {
   id: number;
+  name: string;
+  description: string;
+  price: number;
+  productImg: string;
+  features: string;
+  discount: number;
+  stock: number;
   brand: BrandResponse;
   category: CategoryResponse;
+}
+
+export interface ProductData {
+  name: string;
+  description: string;
+  price: number;
+  productImg?: string;
+  features?: string;
+  discount: number;
+  stock: number;
+  brandId: number;
+  categoryId: number;
 }

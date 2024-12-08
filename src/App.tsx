@@ -31,7 +31,7 @@ function App() {
     (state: RootState) => state.user.isAuthenticated
   );
 
-  const is_admin = useSelector((state: RootState) => state.user.is_admin);
+  const isAdmin = useSelector((state: RootState) => state.user.isAdmin);
 
   useEffect(() => {
     async function fetchUser() {
@@ -92,7 +92,7 @@ function App() {
                 <Route path="/order-history" element={<OrderHistory />} />
               </>
             )}
-            {is_admin && (
+            {isAdmin && (
               <>
                 <Route path="/admin" element={<Admin />} />
               </>

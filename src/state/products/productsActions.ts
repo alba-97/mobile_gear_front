@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as settings from "../../settings";
-import { ProductResponse, ProductForm } from "@/interfaces/Product";
+import { ProductResponse, ProductData } from "@/interfaces/Product";
 import getHeaders from "@/hooks/getHeaders";
 
 export const fetchProducts = async (
@@ -31,11 +31,11 @@ export const fetchDiscountedProducts = async () => {
   return data;
 };
 
-export const addProduct = async (productData: ProductForm) => {
+export const addProduct = async (productData: ProductData) => {
   await axios.post(`${settings.axiosURL}/products`, productData, getHeaders());
 };
 
-export const editProduct = async (id: number, product: ProductForm) => {
+export const editProduct = async (id: number, product: ProductData) => {
   try {
     const { name, stock, description, price, discount, features, productImg } =
       product;
