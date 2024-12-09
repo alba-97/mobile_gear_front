@@ -4,16 +4,12 @@ import { ProductResponse, ProductBody } from "@/interfaces/Product";
 import getHeaders from "@/hooks/getHeaders";
 
 export const fetchProducts = async (
-  searchTerm: string = "",
   filters = {}
 ): Promise<ProductResponse[]> => {
   const { data } = await axios.get<ProductResponse[]>(
     `${settings.axiosURL}/products`,
     {
-      params: {
-        ...filters,
-        modelName: searchTerm,
-      },
+      params: filters,
     }
   );
   return data;

@@ -37,7 +37,7 @@ export const Home = ({ productGridRef }: IHomeProps) => {
         minPrice: minPriceInput.value,
         maxPrice: maxPriceInput.value,
       };
-      const products = await fetchProducts("", filters);
+      const products = await fetchProducts(filters);
       dispatch(setProducts(products));
     } catch (error) {
       console.error("Error fetching products:", error);

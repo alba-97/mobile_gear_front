@@ -7,7 +7,7 @@ import { Box, Stack, Button, useColorModeValue } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { Form, Formik, FormikHelpers } from "formik";
 import LoginSchema from "@/schemas/LoginSchema";
-import { LoginForm } from "@/interfaces/UserResponse";
+import { LoginForm } from "@/interfaces/User";
 import Field from "./Input/Field";
 import { AxiosError } from "axios";
 import { login } from "@/state/user/userSlice";

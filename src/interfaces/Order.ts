@@ -1,5 +1,5 @@
 import { ProductResponse } from "./Product";
-import { UserResponse } from "./UserResponse";
+import { UserResponse } from "./User";
 
 export interface OrderResponse {
   id: number;
