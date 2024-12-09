@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   Box,
   Center,
@@ -34,8 +34,8 @@ export const Home = ({ productGridRef }: IHomeProps) => {
       const filters = {
         brandName: brandInput.value,
         categoryName: categoryInput.value,
-        min: minPriceInput.value,
-        max: maxPriceInput.value,
+        minPrice: minPriceInput.value,
+        maxPrice: maxPriceInput.value,
       };
       const products = await fetchProducts("", filters);
       dispatch(setProducts(products));
@@ -54,29 +54,34 @@ export const Home = ({ productGridRef }: IHomeProps) => {
   ]);
 
   const handleBrandSelect = (brandName: string) => {
-    if (brandName === "All") {
-      brandInput.setValue("");
-    } else {
-      brandInput.setValue(brandName);
-    }
+    brandInput.setValue(brandName === "All" ? "" : brandName);
+    productGridRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
   };
 
   const handleCategorySelect = (categoryName: string) => {
-    if (categoryName === "All") {
-      categoryInput.setValue("");
-    } else {
-      categoryInput.setValue(categoryName);
-    }
+    categoryInput.setValue(categoryName === "All" ? "" : categoryName);
+    productGridRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
   };
+
+  const discountedProductsRef = useRef<HTMLDivElement | null>(null);
 
   return (
     <Box backgroundColor="gray.100" minHeight="100vh">
-      <Banner />
+      <Banner
+        productsRef={productGridRef}
+        discountedProductsRef={discountedProductsRef}
+      />
+      <div ref={discountedProductsRef} />
       <Center mt="20" mb="20">
         <Heading>Special Offers</Heading>
       </Center>
       <Slider />
 
+      <div ref={productGridRef} />
       <Center mt="20" gap="10">
         <Menu>
           <MenuButton fontSize="lg" color="black">
@@ -122,9 +127,7 @@ export const Home = ({ productGridRef }: IHomeProps) => {
           style={{ paddingLeft: "5px" }}
         />
       </Center>
-      <div ref={productGridRef}>
-        <ProductGrid />
-      </div>
+      <ProductGrid />
       <Footer />
     </Box>
   );

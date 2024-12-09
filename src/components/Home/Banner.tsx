@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 
-export default function Banner() {
+interface IBannerProps {
+  productsRef: React.RefObject<HTMLDivElement>;
+  discountedProductsRef: React.RefObject<HTMLDivElement>;
+}
+
+export default function Banner({
+  productsRef,
+  discountedProductsRef,
+}: IBannerProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -18,11 +26,23 @@ export default function Banner() {
             }`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            onClick={() => {
+              discountedProductsRef.current?.scrollIntoView({
+                behavior: "smooth",
+              });
+            }}
             type="button"
           >
             20% OFF
           </button>
-          <button className="flex gap-x-2 bg-transparent hover:bg-white/10 text-white border-2 border-white text-lg sm:text-xl md:text-2xl py-3 px-6 rounded-full h-14 sm:h-16 flex items-center justify-center transition-colors duration-200">
+          <button
+            onClick={() => {
+              productsRef.current?.scrollIntoView({
+                behavior: "smooth",
+              });
+            }}
+            className="flex gap-x-2 bg-transparent hover:bg-white/10 text-white border-2 border-white text-lg sm:text-xl md:text-2xl py-3 px-6 rounded-full h-14 sm:h-16 flex items-center justify-center transition-colors duration-200"
+          >
             <span className="italic">SHOP NOW</span>
             <span>PAY LATER</span>
           </button>

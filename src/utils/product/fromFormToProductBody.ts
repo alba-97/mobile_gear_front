@@ -1,9 +1,9 @@
-import { ProductData, ProductForm } from "@/interfaces/Product";
+import { ProductBody, ProductForm } from "@/interfaces/Product";
 
-export const fromFormToProductData = (
+export const fromFormToProductBody = (
   productForm: ProductForm
-): ProductData => {
-  const productData: ProductData = { ...productForm };
+): ProductBody => {
+  const productData: ProductBody = { ...productForm };
   if (productData.productImg === "") delete productData.productImg;
   if (productData.features === "") delete productData.features;
 

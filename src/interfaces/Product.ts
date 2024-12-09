@@ -26,7 +26,7 @@ export interface ProductResponse {
   category: CategoryResponse;
 }
 
-export interface ProductData {
+export interface ProductBody {
   name: string;
   description: string;
   price: number;

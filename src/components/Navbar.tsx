@@ -67,6 +67,9 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
     filters.categoryName = categoryName;
     const products = await fetchProducts("", filters);
     dispatch(setProducts(products));
+    productGridRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
   };
 
   const handleLogout = () => {
@@ -104,9 +107,6 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
             }}
             padding={3}
             onClick={() => {
-              productGridRef.current?.scrollIntoView({
-                behavior: "smooth",
-              });
               handleCategorySelect("smartphone");
             }}
           >
@@ -122,9 +122,6 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
             }}
             padding={3}
             onClick={() => {
-              productGridRef.current?.scrollIntoView({
-                behavior: "smooth",
-              });
               handleCategorySelect("tablets");
             }}
           >
@@ -140,10 +137,7 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
             }}
             padding={3}
             onClick={() => {
-              productGridRef.current?.scrollIntoView({
-                behavior: "smooth",
-              });
-              handleCategorySelect("accesorios");
+              handleCategorySelect("accesories");
             }}
           >
             Accessories
@@ -157,7 +151,7 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
             {showSearchBar && (
               <Input
                 {...searchInput}
-                placeholder="Buscar por modelo"
+                placeholder="Search by model name"
                 variant="filled"
                 size="md"
                 borderRadius="full"

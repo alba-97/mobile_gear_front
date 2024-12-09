@@ -6,7 +6,7 @@ import AddProductSchema from "@/schemas/AddProductSchema";
 import CreateEditProductForm from "./ProductForm";
 import fromResponseToForm from "@/utils/product/fromResponseToForm";
 import { setLoading } from "@/state/products/productsSlice";
-import { fromFormToProductData } from "@/utils/product/fromFormToAddProductData";
+import { fromFormToProductBody } from "@/utils/product/fromFormToProductBody";
 
 interface IAdminProductsDetailsProps {
   selectedProduct: ProductResponse;
@@ -23,7 +23,7 @@ export const EditProduct = ({
     values: ProductForm,
     { setSubmitting }: FormikHelpers<ProductForm>
   ) => {
-    const data = fromFormToProductData(values);
+    const data = fromFormToProductBody(values);
     await editProduct(selectedProduct.id, data);
     dispatch(setLoading(false));
     setSelectedProduct(null);

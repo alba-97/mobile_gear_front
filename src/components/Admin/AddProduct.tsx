@@ -3,10 +3,6 @@ import { useDispatch } from "react-redux";
 import { fetchCategories } from "../../state/categories/categoriesActions";
 import { addProduct } from "../../state/products/productsActions";
 
-interface IAddProductProps {
-  setSelectedPanel: (panel: string) => void;
-}
-
 import { Formik, FormikHelpers } from "formik";
 import AddProductSchema from "@/schemas/AddProductSchema";
 import CreateEditProductForm from "./ProductForm";
@@ -14,7 +10,11 @@ import { ProductForm } from "@/interfaces/Product";
 import { setError, setLoading } from "@/state/products/productsSlice";
 import { setCategories } from "@/state/categories/categoriesSlice";
 import { AxiosError } from "axios";
-import { fromFormToProductData } from "@/utils/product/fromFormToAddProductData";
+import { fromFormToProductBody } from "@/utils/product/fromFormToProductBody";
+
+interface IAddProductProps {
+  setSelectedPanel: (panel: string) => void;
+}
 
 const AddProduct = ({ setSelectedPanel }: IAddProductProps) => {
   const dispatch = useDispatch();
@@ -40,7 +40,7 @@ const AddProduct = ({ setSelectedPanel }: IAddProductProps) => {
     { setSubmitting }: FormikHelpers<ProductForm>
   ) => {
     try {
-      const data = fromFormToProductData(values);
+      const data = fromFormToProductBody(values);
       await addProduct(data);
     } catch (error) {
       console.error("Creation error:", error);
