@@ -109,7 +109,7 @@ export const Home = ({ productGridRef }: IHomeProps) => {
             <MenuItem onClick={() => handleCategorySelect("tablets")}>
               Tablets
             </MenuItem>
-            <MenuItem onClick={() => handleCategorySelect("accesorios")}>
+            <MenuItem onClick={() => handleCategorySelect("accesories")}>
               Accessories
             </MenuItem>
           </MenuList>
