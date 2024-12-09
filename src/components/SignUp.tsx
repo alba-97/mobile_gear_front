@@ -1,8 +1,6 @@
 import { useNavigate } from "react-router-dom";
-
 import { registerUser } from "../state/user/userActions";
 import { Link } from "react-router-dom";
-
 import {
   Box,
   Stack,
@@ -13,7 +11,7 @@ import {
 import { useDispatch } from "react-redux";
 import { Form, Formik, FormikHelpers } from "formik";
 import Field from "./Input/Field";
-import { RegisterForm } from "@/interfaces/UserResponse";
+import { RegisterForm } from "@/interfaces/User";
 import RegisterSchema from "@/schemas/RegisterSchema";
 import { register } from "@/state/user/userSlice";
 

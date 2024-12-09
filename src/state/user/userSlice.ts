@@ -1,4 +1,4 @@
-import { UserResponse } from "@/interfaces/UserResponse";
+import { UserResponse } from "@/interfaces/User";
 import { createSlice } from "@reduxjs/toolkit";
 
 interface UserState {

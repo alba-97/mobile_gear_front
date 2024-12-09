@@ -3,7 +3,7 @@ import axios from "axios";
 import * as settings from "../settings";
 import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 import getHeaders from "../hooks/getHeaders";
-import { OrderResponse } from "@/interfaces/OrderResponse";
+import { OrderResponse } from "@/interfaces/Order";
 
 export const History = () => {
   const [history, setHistory] = useState([]);

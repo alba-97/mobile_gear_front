@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Button,
   Flex,
   Heading,
-  Spacer,
   ButtonGroup,
   Box,
   Menu,
@@ -13,9 +12,17 @@ import {
   MenuDivider,
   Input,
   IconButton,
+  useDisclosure,
+  useBreakpointValue,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerHeader,
+  DrawerCloseButton,
+  DrawerBody,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaBars } from "react-icons/fa";
 
 import { Link } from "react-router-dom";
 import useInput from "../hooks/useInput";
@@ -47,17 +54,12 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
   const navigate = useNavigate();
 
   const searchInput = useInput();
-  const [showSearchBar, setShowSearchBar] = useState(false);
-
-  const toggleSearchBar = () => {
-    setShowSearchBar(!showSearchBar);
-  };
 
   const dispatch = useDispatch();
 
   const handleSearchSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const products = await fetchProducts(searchInput.value);
+    const products = await fetchProducts({ modelName: searchInput.value });
     dispatch(setProducts(products));
     searchInput.reset();
   };
@@ -65,7 +67,7 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
   const handleCategorySelect = async (categoryName: string) => {
     categoryInput.setValue(categoryName);
     filters.categoryName = categoryName;
-    const products = await fetchProducts("", filters);
+    const products = await fetchProducts(filters);
     dispatch(setProducts(products));
     productGridRef.current?.scrollIntoView({
       behavior: "smooth",
@@ -78,166 +80,259 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
     navigate("/");
   };
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const isDesktop = useBreakpointValue({ base: false, md: true });
+
   return (
     <Flex
-      width="100%"
-      alignItems="center"
-      gap="2"
-      p="4"
-      backgroundColor="#EC4E20"
+      align="center"
+      p={4}
+      bg="gray.800"
+      color="white"
+      backgroundColor={"#EC4E20"}
+      justifyContent="space-between"
     >
-      <Box p="2">
-        <Heading
-          as={Link}
-          to="/"
-          size="xl"
-          color="white"
-          onClick={() => handleCategorySelect("")}
-        >
-          Mobile Gear
-        </Heading>
-      </Box>
-      <Flex ml="20" gap="8">
-        <Menu>
-          <MenuButton
-            fontSize="lg"
-            color="white"
-            _hover={{
-              bg: "#a62b07",
-            }}
-            padding={3}
-            onClick={() => {
-              handleCategorySelect("smartphone");
-            }}
-          >
-            Mobile Phones
-          </MenuButton>
-        </Menu>
-        <Menu>
-          <MenuButton
-            fontSize="lg"
-            color="white"
-            _hover={{
-              bg: "#a62b07",
-            }}
-            padding={3}
-            onClick={() => {
-              handleCategorySelect("tablets");
-            }}
-          >
-            Tablets
-          </MenuButton>
-        </Menu>
-        <Menu>
-          <MenuButton
-            fontSize="lg"
-            color="white"
-            _hover={{
-              bg: "#a62b07",
-            }}
-            padding={3}
-            onClick={() => {
-              handleCategorySelect("accesories");
-            }}
-          >
-            Accessories
-          </MenuButton>
-        </Menu>
-      </Flex>
-      <Spacer />
-      <Box mr={10}>
-        <form onSubmit={handleSearchSubmit}>
-          <Flex>
-            {showSearchBar && (
-              <Input
-                {...searchInput}
-                placeholder="Search by model name"
-                variant="filled"
-                size="md"
-                borderRadius="full"
-                bg="white"
-                boxShadow="md"
-                _hover={{ boxShadow: "lg" }}
-                _focus={{ boxShadow: "lg", color: "white" }}
-              />
-            )}
-            <IconButton
-              icon={<SearchIcon />}
-              type="submit"
-              size="lg"
-              ml={2}
-              borderRadius="full"
-              bg="secondary"
-              color="white"
-              _hover={{ bg: "#3498DB" }}
-              _active={{ bg: "#3498DB" }}
-              onClick={toggleSearchBar}
-              aria-label="Search"
-            />
-            <IconButton
-              as={Link}
-              to="/cart"
-              icon={<FaShoppingCart />}
-              size="lg"
-              ml={2}
-              borderRadius="full"
-              bg="secondary"
-              color="white"
-              _hover={{ bg: "#3498DB", color: "white" }}
-              _active={{ bg: "#3498DB" }}
-              aria-label="Cart"
-            />
-          </Flex>
-        </form>
-      </Box>
-      {isAuthenticated ? (
-        <Menu>
-          <MenuButton
-            fontSize="md"
-            color="white"
-            padding={2}
-            _hover={{
-              textDecoration: "underline",
-            }}
-          >
-            {userData.email}
-          </MenuButton>
-          <MenuList>
-            <MenuItem as={Link} to="/">
-              Account
-            </MenuItem>
-            <MenuItem as={Link} to="/history">
-              History
-            </MenuItem>
-            {isAdmin ? (
-              <MenuItem as={Link} to="/admin">
-                My dashboard
-              </MenuItem>
-            ) : (
-              <MenuItem as={Link} to="">
-                My list
-              </MenuItem>
-            )}
-            <MenuDivider />
+      <Heading as={Link} to="/" size="md" mr={4} _hover={{ color: "white" }}>
+        MOBILE GEAR
+      </Heading>
 
-            <MenuItem as={Link} to="/" onClick={handleLogout}>
-              Log out
-            </MenuItem>
-          </MenuList>
-        </Menu>
+      {isDesktop ? (
+        <Flex>
+          <Menu>
+            <MenuButton
+              fontSize="lg"
+              color="white"
+              _hover={{
+                bg: "#a62b07",
+              }}
+              borderRadius={"md"}
+              padding={3}
+              onClick={() => {
+                handleCategorySelect("smartphone");
+              }}
+            >
+              Mobile Phones
+            </MenuButton>
+          </Menu>
+          <Menu>
+            <MenuButton
+              fontSize="lg"
+              color="white"
+              _hover={{
+                bg: "#a62b07",
+              }}
+              borderRadius={"md"}
+              padding={3}
+              onClick={() => {
+                handleCategorySelect("tablets");
+              }}
+            >
+              Tablets
+            </MenuButton>
+          </Menu>
+          <Menu>
+            <MenuButton
+              fontSize="lg"
+              color="white"
+              _hover={{
+                bg: "#a62b07",
+              }}
+              borderRadius={"md"}
+              padding={3}
+              onClick={() => {
+                handleCategorySelect("accessories");
+              }}
+            >
+              Accessories
+            </MenuButton>
+          </Menu>
+        </Flex>
       ) : (
-        <ButtonGroup gap="2">
-          <Link to="/signup">
-            <Button variant="outline" border="1px solid black">
-              Sign Up
-            </Button>
-          </Link>
-          <Link to="/login">
-            <Button backgroundColor="#3498DB" color="white">
-              Log in
-            </Button>
-          </Link>
-        </ButtonGroup>
+        <IconButton
+          icon={<FaBars />}
+          size="lg"
+          ml={2}
+          borderRadius="md"
+          color="white"
+          bg="transparent"
+          _hover={{ bg: "#a62b07" }}
+          onClick={onOpen}
+          aria-label="Menu"
+        />
+      )}
+
+      {isDesktop && (
+        <Box mr={10}>
+          <form onSubmit={handleSearchSubmit}>
+            <Flex marginLeft={2}>
+              <Input
+                placeholder="Search..."
+                backgroundColor="white"
+                color="black"
+                {...searchInput}
+              />
+              <IconButton
+                type="submit"
+                aria-label="Search"
+                icon={<SearchIcon />}
+                backgroundColor="#3498DB"
+                _hover={{ bg: "#026bb0" }}
+                color="white"
+                borderRadius={"full"}
+                ml={2}
+              />
+            </Flex>
+          </form>
+        </Box>
+      )}
+
+      {isDesktop &&
+        (isAuthenticated ? (
+          <Menu>
+            <MenuButton
+              as={Button}
+              backgroundColor={"#3498DB"}
+              color="white"
+              _hover={{ bg: "#026bb0" }}
+              _active={{ bg: "#026bb0" }}
+            >
+              Account
+            </MenuButton>
+            <MenuList>
+              <MenuItem color="black" pointerEvents="none">
+                {userData.username}
+              </MenuItem>
+              <MenuDivider />
+              <MenuItem as={Link} to="/history" color="black">
+                History
+              </MenuItem>
+              {isAdmin ? (
+                <MenuItem as={Link} to="/admin" color="black">
+                  My dashboard
+                </MenuItem>
+              ) : (
+                <MenuItem as={Link} to="" color="black">
+                  My list
+                </MenuItem>
+              )}
+              <MenuDivider />
+              <MenuItem as={Link} to="/" onClick={handleLogout} color="black">
+                Log out
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        ) : (
+          <ButtonGroup gap="2">
+            <Link to="/signup">
+              <Button
+                backgroundColor="transparent"
+                color="white"
+                _hover={{ bg: "#a62b07" }}
+              >
+                Sign Up
+              </Button>
+            </Link>
+            <Link to="/login">
+              <Button
+                backgroundColor="#3498DB"
+                color="white"
+                _hover={{ bg: "#026bb0" }}
+              >
+                Log In
+              </Button>
+            </Link>
+          </ButtonGroup>
+        ))}
+
+      {!isDesktop && (
+        <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader>Menu</DrawerHeader>
+            <DrawerBody>
+              <Menu>
+                <MenuButton
+                  fontSize="lg"
+                  color="black"
+                  padding={3}
+                  onClick={() => {
+                    handleCategorySelect("smartphone");
+                  }}
+                >
+                  Mobile Phones
+                </MenuButton>
+              </Menu>
+              <Menu>
+                <MenuButton
+                  fontSize="lg"
+                  color="black"
+                  padding={3}
+                  onClick={() => {
+                    handleCategorySelect("tablets");
+                  }}
+                >
+                  Tablets
+                </MenuButton>
+              </Menu>
+              <Menu>
+                <MenuButton
+                  fontSize="lg"
+                  color="black"
+                  padding={3}
+                  onClick={() => {
+                    handleCategorySelect("accessories");
+                  }}
+                >
+                  Accessories
+                </MenuButton>
+              </Menu>
+              <Box mt={4}>
+                {isAuthenticated ? (
+                  <Menu>
+                    <MenuItem as={Link} to="/history">
+                      History
+                    </MenuItem>
+                    {isAdmin ? (
+                      <MenuItem as={Link} to="/admin">
+                        My dashboard
+                      </MenuItem>
+                    ) : (
+                      <MenuItem as={Link} to="">
+                        My list
+                      </MenuItem>
+                    )}
+                    <MenuDivider />
+                    <MenuItem as={Link} to="/" onClick={handleLogout}>
+                      Log out
+                    </MenuItem>
+                  </Menu>
+                ) : (
+                  <ButtonGroup gap="2">
+                    <Link to="/signup">
+                      <Button
+                        backgroundColor={"#3498DB"}
+                        color="white"
+                        width="100%"
+                      >
+                        Sign Up
+                      </Button>
+                    </Link>
+                    <Link to="/login">
+                      <Button
+                        backgroundColor={"#3498DB"}
+                        color="white"
+                        width="100%"
+                      >
+                        Log In
+                      </Button>
+                    </Link>
+                  </ButtonGroup>
+                )}
+              </Box>
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
       )}
     </Flex>
   );
