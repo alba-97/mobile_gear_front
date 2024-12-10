@@ -1,13 +1,5 @@
 import { useEffect, useRef } from "react";
-import {
-  Box,
-  Center,
-  Heading,
-  Menu,
-  MenuList,
-  MenuButton,
-  MenuItem,
-} from "@chakra-ui/react";
+import { Box, Center, Heading } from "@chakra-ui/react";
 import { ProductGrid } from "../Product/ProductGrid";
 import { Slider } from "./Slider";
 import useInput from "../../hooks/useInput";
@@ -16,6 +8,7 @@ import { Footer } from "../Footer";
 import { useDispatch } from "react-redux";
 import Banner from "./Banner";
 import { setProducts } from "@/state/products/productsSlice";
+import Filters from "@/Filters";
 
 interface IHomeProps {
   productGridRef: React.RefObject<HTMLDivElement>;
@@ -82,51 +75,12 @@ export const Home = ({ productGridRef }: IHomeProps) => {
       <Slider />
 
       <div ref={productGridRef} />
-      <Center mt="20" gap="10">
-        <Menu>
-          <MenuButton fontSize="lg" color="black">
-            Brands
-          </MenuButton>
-          <MenuList>
-            <MenuItem onClick={() => handleBrandSelect("All")}>All</MenuItem>
-            <MenuItem onClick={() => handleBrandSelect("samsung")}>
-              Samsung
-            </MenuItem>
-            <MenuItem onClick={() => handleBrandSelect("apple")}>
-              Apple
-            </MenuItem>
-          </MenuList>
-        </Menu>
-        <Menu>
-          <MenuButton fontSize="lg" color="black">
-            Categories
-          </MenuButton>
-          <MenuList>
-            <MenuItem onClick={() => handleCategorySelect("All")}>All</MenuItem>
-            <MenuItem onClick={() => handleCategorySelect("smartphone")}>
-              Mobile Phones
-            </MenuItem>
-            <MenuItem onClick={() => handleCategorySelect("tablets")}>
-              Tablets
-            </MenuItem>
-            <MenuItem onClick={() => handleCategorySelect("accesories")}>
-              Accessories
-            </MenuItem>
-          </MenuList>
-        </Menu>
-        <input
-          type="text"
-          placeholder="Min price"
-          {...minPriceInput}
-          style={{ paddingLeft: "5px" }}
-        />
-        <input
-          type="text"
-          placeholder="Max price"
-          {...maxPriceInput}
-          style={{ paddingLeft: "5px" }}
-        />
-      </Center>
+      <Filters
+        handleCategorySelect={handleCategorySelect}
+        handleBrandSelect={handleBrandSelect}
+        minPriceInput={minPriceInput}
+        maxPriceInput={maxPriceInput}
+      />
       <ProductGrid />
       <Footer />
     </Box>

@@ -10,7 +10,6 @@ import {
   MenuItem,
   MenuButton,
   MenuDivider,
-  Input,
   IconButton,
   useDisclosure,
   useBreakpointValue,
@@ -21,7 +20,6 @@ import {
   DrawerCloseButton,
   DrawerBody,
 } from "@chakra-ui/react";
-import { SearchIcon } from "@chakra-ui/icons";
 import { FaBars } from "react-icons/fa";
 
 import { Link } from "react-router-dom";
@@ -34,6 +32,8 @@ import { useNavigate } from "react-router-dom";
 import { RootState } from "@/state/store";
 import { logout } from "@/state/user/userSlice";
 import { setProducts } from "@/state/products/productsSlice";
+import DropdownSearch from "./DropdownSearch";
+import Search from "./Search";
 
 interface INavbarProps {
   productGridRef: React.RefObject<HTMLDivElement>;
@@ -148,42 +148,24 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
           </Menu>
         </Flex>
       ) : (
-        <IconButton
-          icon={<FaBars />}
-          size="lg"
-          ml={2}
-          borderRadius="md"
-          color="white"
-          bg="transparent"
-          _hover={{ bg: "#a62b07" }}
-          onClick={onOpen}
-          aria-label="Menu"
-        />
+        <Flex>
+          <DropdownSearch {...searchInput} handleSubmit={handleSearchSubmit} />
+          <IconButton
+            icon={<FaBars />}
+            size="lg"
+            ml={2}
+            borderRadius="md"
+            color="white"
+            bg="transparent"
+            _hover={{ bg: "#a62b07" }}
+            onClick={onOpen}
+            aria-label="Menu"
+          />
+        </Flex>
       )}
 
       {isDesktop && (
-        <Box mr={10}>
-          <form onSubmit={handleSearchSubmit}>
-            <Flex marginLeft={2}>
-              <Input
-                placeholder="Search..."
-                backgroundColor="white"
-                color="black"
-                {...searchInput}
-              />
-              <IconButton
-                type="submit"
-                aria-label="Search"
-                icon={<SearchIcon />}
-                backgroundColor="#3498DB"
-                _hover={{ bg: "#026bb0" }}
-                color="white"
-                borderRadius={"full"}
-                ml={2}
-              />
-            </Flex>
-          </form>
-        </Box>
+        <Search {...searchInput} handleSubmit={handleSearchSubmit} />
       )}
 
       {isDesktop &&

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Flex, HStack, IconButton } from "@chakra-ui/react";
+import { Flex, HStack, IconButton, useBreakpointValue } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { ProductCard } from "../Product/ProductCard";
@@ -16,7 +16,6 @@ export const Slider = () => {
   const products = useSelector(
     (state: RootState) => state.products.discountedProducts
   );
-  const [currentSlide, setCurrentSlide] = useState(0);
 
   const dispatch = useDispatch();
 
@@ -36,12 +35,17 @@ export const Slider = () => {
     fetchData();
   }, []);
 
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const visibleSlides = useBreakpointValue({ base: 1, md: 2, lg: 3 }) ?? 0;
+
   const handlePrevSlide = () => {
-    setCurrentSlide((prev) => (prev > 0 ? prev - 1 : prev));
+    setCurrentSlide((prev) => Math.max(0, prev - visibleSlides));
   };
 
   const handleNextSlide = () => {
-    setCurrentSlide((prev) => (prev < products.length - 3 ? prev + 1 : prev));
+    setCurrentSlide((prev) =>
+      Math.min(products.length - visibleSlides, prev + visibleSlides)
+    );
   };
 
   return (
@@ -60,20 +64,25 @@ export const Slider = () => {
       />
 
       <HStack gap="6">
-        {products.slice(currentSlide, currentSlide + 3).map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+        {products
+          .slice(currentSlide, currentSlide + visibleSlides)
+          .map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
       </HStack>
 
       <IconButton
         icon={<ChevronRightIcon />}
         onClick={handleNextSlide}
-        isDisabled={currentSlide >= products.length - 3}
+        isDisabled={currentSlide >= products.length - visibleSlides}
         margin="10"
         aria-label="Next Slide"
         sx={{
           _hover: {
-            cursor: currentSlide >= products.length - 3 ? "default" : "pointer",
+            cursor:
+              currentSlide >= products.length - visibleSlides
+                ? "default"
+                : "pointer",
           },
         }}
       />
