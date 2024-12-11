@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../state/products/productsActions";
-import { SimpleGrid, Center } from "@chakra-ui/react";
+import { SimpleGrid, Center, Spinner } from "@chakra-ui/react";
 import { ProductCard } from "./ProductCard";
 import { RootState } from "@/state/store";
 import {
@@ -12,7 +12,9 @@ import {
 import { AxiosError } from "axios";
 
 export const ProductGrid = () => {
-  const products = useSelector((state: RootState) => state.products.products);
+  const { products, isLoading } = useSelector(
+    (state: RootState) => state.products
+  );
   const dispatch = useDispatch();
 
   const fetchData = async () => {
@@ -33,11 +35,21 @@ export const ProductGrid = () => {
 
   return (
     <Center mt="5">
-      <SimpleGrid maxWidth="1200px" columns={[1, 2, 3, 4]} spacing="20" p="5">
-        {products.slice(0, 20).map((product) => {
-          return <ProductCard key={product.id} product={product} />;
-        })}
-      </SimpleGrid>
+      {isLoading ? (
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+        />
+      ) : (
+        <SimpleGrid maxWidth="1200px" columns={[1, 2, 3, 4]} spacing="20" p="5">
+          {products.slice(0, 20).map((product) => {
+            return <ProductCard key={product.id} product={product} />;
+          })}
+        </SimpleGrid>
+      )}
     </Center>
   );
 };

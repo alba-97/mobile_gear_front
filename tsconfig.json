@@ -19,6 +19,11 @@
       "@/*": ["./src/*"],
       "@assets/*": ["./src/assets/*"],
       "@components/*": ["./src/components/*"],
+      "@interfaces/*": ["./src/interfaces/*"],
+      "@schemas/*": ["./src/schemas/*"],
+      "@state/*": ["./src/state/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@utils/*": ["./src/utils/*"],
       "@configs/*": ["./src/configs/*"],
       "@pages/*": ["./src/pages/*"]
     }

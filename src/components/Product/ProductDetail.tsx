@@ -127,13 +127,14 @@ export const ProductDetail = () => {
   return (
     <Center backgroundColor=" #EDF2F7" minHeight="100vh">
       <Flex
-        p="20"
-        width="50%"
+        p={["5", "10", "20"]}
+        width={["95%", "85%", "75%", "50%"]}
         borderWidth="1px"
         borderRadius="lg"
         overflow="hidden"
         bg="white"
         boxShadow="0 2px 4px rgba(0, 0, 0, 0.2)"
+        direction={["column", "column", "row"]}
       >
         <Box flex="1">
           <Image
@@ -142,14 +143,18 @@ export const ProductDetail = () => {
             borderRadius="md"
           />
         </Box>
-        <Box flex="1" ml="5">
+        <Box flex="1" ml={["0", "0", "5"]} mt={["5", "5", "0"]}>
           {showAlert && (
             <Alert status="success">
               <AlertIcon />
               Product successfully added!
             </Alert>
           )}
-          <Text fontSize="sm" color="orange" textTransform="uppercase">
+          <Text
+            fontSize={["sm", "md"]}
+            color="orange"
+            textTransform="uppercase"
+          >
             {product.brand.name}
           </Text>
           <Heading color="black" mb="5">

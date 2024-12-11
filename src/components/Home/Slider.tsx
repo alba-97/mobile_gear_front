@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
-import { Flex, HStack, IconButton, useBreakpointValue } from "@chakra-ui/react";
+import {
+  Flex,
+  HStack,
+  IconButton,
+  Spinner,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { ProductCard } from "../Product/ProductCard";
@@ -13,8 +19,8 @@ import {
 import { AxiosError } from "axios";
 
 export const Slider = () => {
-  const products = useSelector(
-    (state: RootState) => state.products.discountedProducts
+  const { discountedProducts: products, isLoading } = useSelector(
+    (state: RootState) => state.products
   );
 
   const dispatch = useDispatch();
@@ -64,11 +70,21 @@ export const Slider = () => {
       />
 
       <HStack gap="6">
-        {products
-          .slice(currentSlide, currentSlide + visibleSlides)
-          .map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+        {isLoading ? (
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
+        ) : (
+          products
+            .slice(currentSlide, currentSlide + visibleSlides)
+            .map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))
+        )}
       </HStack>
 
       <IconButton

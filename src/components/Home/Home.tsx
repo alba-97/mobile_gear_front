@@ -1,14 +1,15 @@
 import { useEffect, useRef } from "react";
 import { Box, Center, Heading } from "@chakra-ui/react";
-import { ProductGrid } from "../Product/ProductGrid";
 import { Slider } from "./Slider";
-import useInput from "../../hooks/useInput";
-import { fetchProducts } from "../../state/products/productsActions";
-import { Footer } from "../Footer";
+
 import { useDispatch } from "react-redux";
 import Banner from "./Banner";
 import { setProducts } from "@/state/products/productsSlice";
-import Filters from "@/Filters";
+import Filters from "@/components/Filters";
+import { Footer } from "../Footer";
+import useInput from "@/hooks/useInput";
+import { fetchProducts } from "@/state/products/productsActions";
+import { ProductGrid } from "../Product/ProductGrid";
 
 interface IHomeProps {
   productGridRef: React.RefObject<HTMLDivElement>;
