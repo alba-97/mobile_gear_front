@@ -22,7 +22,7 @@ import {
 } from "@chakra-ui/react";
 import { FaBars } from "react-icons/fa";
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import useInput from "../hooks/useInput";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -62,6 +62,9 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
     const products = await fetchProducts({ modelName: searchInput.value });
     dispatch(setProducts(products));
     searchInput.reset();
+    productGridRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
   };
 
   const handleCategorySelect = async (categoryName: string) => {
@@ -83,6 +86,8 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isDesktop = useBreakpointValue({ base: false, md: true });
 
+  const isHome = useLocation().pathname === "/";
+
   return (
     <Flex
       align="center"
@@ -98,58 +103,67 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
 
       {isDesktop ? (
         <Flex>
-          <Menu>
-            <MenuButton
-              fontSize="lg"
-              color="white"
-              _hover={{
-                bg: "#a62b07",
-              }}
-              borderRadius={"md"}
-              padding={3}
-              onClick={() => {
-                handleCategorySelect("smartphone");
-              }}
-            >
-              Mobile Phones
-            </MenuButton>
-          </Menu>
-          <Menu>
-            <MenuButton
-              fontSize="lg"
-              color="white"
-              _hover={{
-                bg: "#a62b07",
-              }}
-              borderRadius={"md"}
-              padding={3}
-              onClick={() => {
-                handleCategorySelect("tablets");
-              }}
-            >
-              Tablets
-            </MenuButton>
-          </Menu>
-          <Menu>
-            <MenuButton
-              fontSize="lg"
-              color="white"
-              _hover={{
-                bg: "#a62b07",
-              }}
-              borderRadius={"md"}
-              padding={3}
-              onClick={() => {
-                handleCategorySelect("accessories");
-              }}
-            >
-              Accessories
-            </MenuButton>
-          </Menu>
+          {isHome && (
+            <>
+              <Menu>
+                <MenuButton
+                  fontSize="lg"
+                  color="white"
+                  _hover={{
+                    bg: "#a62b07",
+                  }}
+                  borderRadius={"md"}
+                  padding={3}
+                  onClick={() => {
+                    handleCategorySelect("smartphone");
+                  }}
+                >
+                  Mobile Phones
+                </MenuButton>
+              </Menu>
+              <Menu>
+                <MenuButton
+                  fontSize="lg"
+                  color="white"
+                  _hover={{
+                    bg: "#a62b07",
+                  }}
+                  borderRadius={"md"}
+                  padding={3}
+                  onClick={() => {
+                    handleCategorySelect("tablets");
+                  }}
+                >
+                  Tablets
+                </MenuButton>
+              </Menu>
+              <Menu>
+                <MenuButton
+                  fontSize="lg"
+                  color="white"
+                  _hover={{
+                    bg: "#a62b07",
+                  }}
+                  borderRadius={"md"}
+                  padding={3}
+                  onClick={() => {
+                    handleCategorySelect("accessories");
+                  }}
+                >
+                  Accessories
+                </MenuButton>
+              </Menu>
+            </>
+          )}
         </Flex>
       ) : (
         <Flex>
-          <DropdownSearch {...searchInput} handleSubmit={handleSearchSubmit} />
+          {isHome && (
+            <DropdownSearch
+              {...searchInput}
+              handleSubmit={handleSearchSubmit}
+            />
+          )}
           <IconButton
             icon={<FaBars />}
             size="lg"
@@ -164,7 +178,7 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
         </Flex>
       )}
 
-      {isDesktop && (
+      {isDesktop && isHome && (
         <Search {...searchInput} handleSubmit={handleSearchSubmit} />
       )}
 
