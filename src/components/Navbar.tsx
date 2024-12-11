@@ -22,59 +22,38 @@ import {
 } from "@chakra-ui/react";
 import { FaBars } from "react-icons/fa";
 
-import { Link, useLocation } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import useInput from "../hooks/useInput";
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchProducts } from "../state/products/productsActions";
 import { useNavigate } from "react-router-dom";
 
 import { RootState } from "@/state/store";
 import { logout } from "@/state/user/userSlice";
-import { setProducts } from "@/state/products/productsSlice";
 import DropdownSearch from "./DropdownSearch";
 import Search from "./Search";
 
-interface INavbarProps {
-  productGridRef: React.RefObject<HTMLDivElement>;
-}
-
-export const Navbar = ({ productGridRef }: INavbarProps) => {
+export const Navbar = () => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
   );
   const userData = useSelector((state: RootState) => state.user.userData);
   const isAdmin = useSelector((state: RootState) => state.user.isAdmin);
-  const categoryInput = useInput();
-
-  const filters = {
-    categoryName: categoryInput.value,
-  };
 
   const navigate = useNavigate();
-
   const searchInput = useInput();
-
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleSearchSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const products = await fetchProducts({ modelName: searchInput.value });
-    dispatch(setProducts(products));
+    setSearchParams({ modelName: searchInput.value });
     searchInput.reset();
-    productGridRef.current?.scrollIntoView({
-      behavior: "smooth",
-    });
   };
 
   const handleCategorySelect = async (categoryName: string) => {
-    categoryInput.setValue(categoryName);
-    filters.categoryName = categoryName;
-    const products = await fetchProducts(filters);
-    dispatch(setProducts(products));
-    productGridRef.current?.scrollIntoView({
-      behavior: "smooth",
-    });
+    searchParams.set("categoryName", categoryName);
+    navigate({ pathname: "/", search: searchParams.toString() });
   };
 
   const handleLogout = () => {
@@ -85,8 +64,6 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isDesktop = useBreakpointValue({ base: false, md: true });
-
-  const isHome = useLocation().pathname === "/";
 
   return (
     <Flex
@@ -103,67 +80,58 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
 
       {isDesktop ? (
         <Flex>
-          {isHome && (
-            <>
-              <Menu>
-                <MenuButton
-                  fontSize="lg"
-                  color="white"
-                  _hover={{
-                    bg: "#a62b07",
-                  }}
-                  borderRadius={"md"}
-                  padding={3}
-                  onClick={() => {
-                    handleCategorySelect("smartphone");
-                  }}
-                >
-                  Mobile Phones
-                </MenuButton>
-              </Menu>
-              <Menu>
-                <MenuButton
-                  fontSize="lg"
-                  color="white"
-                  _hover={{
-                    bg: "#a62b07",
-                  }}
-                  borderRadius={"md"}
-                  padding={3}
-                  onClick={() => {
-                    handleCategorySelect("tablets");
-                  }}
-                >
-                  Tablets
-                </MenuButton>
-              </Menu>
-              <Menu>
-                <MenuButton
-                  fontSize="lg"
-                  color="white"
-                  _hover={{
-                    bg: "#a62b07",
-                  }}
-                  borderRadius={"md"}
-                  padding={3}
-                  onClick={() => {
-                    handleCategorySelect("accessories");
-                  }}
-                >
-                  Accessories
-                </MenuButton>
-              </Menu>
-            </>
-          )}
+          <Menu>
+            <MenuButton
+              fontSize="lg"
+              color="white"
+              _hover={{
+                bg: "#a62b07",
+              }}
+              borderRadius={"md"}
+              padding={3}
+              onClick={() => {
+                handleCategorySelect("smartphone");
+              }}
+            >
+              Mobile Phones
+            </MenuButton>
+          </Menu>
+          <Menu>
+            <MenuButton
+              fontSize="lg"
+              color="white"
+              _hover={{
+                bg: "#a62b07",
+              }}
+              borderRadius={"md"}
+              padding={3}
+              onClick={() => {
+                handleCategorySelect("tablets");
+              }}
+            >
+              Tablets
+            </MenuButton>
+          </Menu>
+          <Menu>
+            <MenuButton
+              fontSize="lg"
+              color="white"
+              _hover={{
+                bg: "#a62b07",
+              }}
+              borderRadius={"md"}
+              padding={3}
+              onClick={() => {
+                handleCategorySelect("accessories");
+              }}
+            >
+              Accessories
+            </MenuButton>
+          </Menu>
         </Flex>
       ) : (
         <Flex>
-          {isHome && (
-            <DropdownSearch
-              {...searchInput}
-              handleSubmit={handleSearchSubmit}
-            />
-          )}
+          <DropdownSearch {...searchInput} handleSubmit={handleSearchSubmit} />
           <IconButton
             icon={<FaBars />}
             size="lg"
@@ -178,7 +146,7 @@ export const Navbar = ({ productGridRef }: INavbarProps) => {
         </Flex>
       )}
 
-      {isDesktop && isHome && (
+      {isDesktop && (
         <Search {...searchInput} handleSubmit={handleSearchSubmit} />
       )}
 

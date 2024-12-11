@@ -12,7 +12,7 @@ import { History } from "./components/History";
 import { Login } from "./components/Login";
 import { SignUp } from "./components/SignUp";
 import { Box } from "@chakra-ui/react";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import * as settings from "./settings";
@@ -62,8 +62,6 @@ function App() {
     fetchData();
   }, []);
 
-  const productGridRef = useRef<HTMLDivElement | null>(null);
-
   return (
     <>
       <Helmet>
@@ -71,19 +69,13 @@ function App() {
       </Helmet>
       <BrowserRouter>
         <Box width="100%">
-          <Navbar productGridRef={productGridRef} />
+          <Navbar />
           <Routes>
-            <Route
-              path="/"
-              element={<Home productGridRef={productGridRef} />}
-            />
+            <Route path="/" element={<Home />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
             <Route path="/history" element={<History />} />
-            <Route
-              path="/products"
-              element={<Home productGridRef={productGridRef} />}
-            />
+            <Route path="/products" element={<Home />} />
             <Route path="/products/:id" element={<ProductDetail />} />
             {isAuthenticated && (
               <>

@@ -47,7 +47,7 @@ const CreateEditProductForm = ({ mode }: IProductForm) => {
           />
 
           <Select
-            options={["Default", "Smartphones", "Tablets", "Accesories"]}
+            options={["Default", "Smartphones", "Tablets", "Accessories"]}
             value="category"
             label="Category"
           />

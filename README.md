@@ -1,34 +1,34 @@
-# E-commerce Mobile gear
+# E-commerce Mobile Gear
 
-### Objetivos
+### Goals
 
-En este proyecto de 2 semanas creamos una web B2C de productos tecnologicos, orientados a telefonía móvil y accesorios.
+In this 2-week project, we created a B2C website for tech products, focused on mobile phones and accessories.
 
-### Tecnologías y Herramientas
+### Technologies and Tools
 
-#### Front
+#### Frontend
 
 JavaScript, React, Vite.js, Redux, Axios, Chakra UI, CSS.
 
-### Funcionalidades
+### Features
 
-- CRUD basico del manejo de un usuario.
-- Administrador : agregar/editar usuarios y administrador ; agregar/editar productos ; ver lista de productos.
-- Buscador de productos a traves de filtros: nombre, categoria o descripcion .
-- Vista de productos y sus caracteristicas de forma individual.
-- Carrito de compras : productos , cantidades ,subtotal y total con descuentos aplicados.
-- Historial de compras.
-- Navbar : Logo, menu , barra de busquedas y registro.
-- Mantener sesión abierta ante un cierre del browser o refresh.
+- Basic CRUD operations for user management.
+- Admin: add/edit users and administrators; add/edit products; view product list.
+- Product search through filters: name, category, or description.
+- View individual products and their features.
+- Shopping cart: products, quantities, subtotal, and total with applied discounts.
+- Purchase history.
+- Navbar: Logo, menu, search bar, and registration.
+- Keep the session active after browser closure or refresh.
 
-### Configuración
+### Setup
 
-- Cloná este repositorio y corré en la terminal:
+- Clone this repository and run the following in the terminal:
 
 `npm install`
-para instalar las dependencias desde la carpeta api y client por separado. (mobile_gear_front mobile_gear_back)
+to install dependencies from both the API and client folders separately. (mobile_gear_front mobile_gear_back)
 
-- Uso :
-  Después de clonar el repositorio y haber instalado las dependencias. Podes correr desde la carpeta client y api por separado:
+- Usage:
+  After cloning the repository and installing dependencies, you can run from both the client and API folders separately:
 
 `npm run dev`

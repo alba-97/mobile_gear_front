@@ -4,61 +4,51 @@ import { Slider } from "./Slider";
 
 import { useDispatch } from "react-redux";
 import Banner from "./Banner";
-import { setProducts } from "@/state/products/productsSlice";
+import { setLoading, setProducts } from "@/state/products/productsSlice";
 import Filters from "@/components/Filters";
 import { Footer } from "../Footer";
-import useInput from "@/hooks/useInput";
 import { fetchProducts } from "@/state/products/productsActions";
 import { ProductGrid } from "../Product/ProductGrid";
+import { useSearchParams } from "react-router-dom";
 
-interface IHomeProps {
-  productGridRef: React.RefObject<HTMLDivElement>;
-}
-
-export const Home = ({ productGridRef }: IHomeProps) => {
-  const brandInput = useInput();
-  const categoryInput = useInput();
-  const minPriceInput = useInput();
-  const maxPriceInput = useInput();
-
+export const Home = () => {
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const productGridRef = useRef<HTMLDivElement | null>(null);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
-      const filters = {
-        brandName: brandInput.value,
-        categoryName: categoryInput.value,
-        minPrice: minPriceInput.value,
-        maxPrice: maxPriceInput.value,
-      };
-      const products = await fetchProducts(filters);
-      dispatch(setProducts(products));
+      const products = await fetchProducts(searchParams);
+      await dispatch(setProducts(products));
     } catch (error) {
       console.error("Error fetching products:", error);
     }
+    setLoading(false);
+
+    const brandName = searchParams.get("brandName");
+    const categoryName = searchParams.get("categoryName");
+    const modelName = searchParams.get("modelName");
+
+    if (brandName || categoryName || modelName)
+      productGridRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
     fetchData();
-  }, [
-    brandInput.value,
-    categoryInput.value,
-    minPriceInput.value,
-    maxPriceInput.value,
-  ]);
+  }, [searchParams]);
 
   const handleBrandSelect = (brandName: string) => {
-    brandInput.setValue(brandName === "All" ? "" : brandName);
-    productGridRef.current?.scrollIntoView({
-      behavior: "smooth",
-    });
+    searchParams.set("brandName", brandName === "All" ? "" : brandName);
+    setSearchParams(searchParams);
   };
 
   const handleCategorySelect = (categoryName: string) => {
-    categoryInput.setValue(categoryName === "All" ? "" : categoryName);
-    productGridRef.current?.scrollIntoView({
-      behavior: "smooth",
-    });
+    searchParams.set(
+      "categoryName",
+      categoryName === "All" ? "" : categoryName
+    );
+    setSearchParams(searchParams);
   };
 
   const discountedProductsRef = useRef<HTMLDivElement | null>(null);
@@ -79,8 +69,6 @@ export const Home = ({ productGridRef }: IHomeProps) => {
       <Filters
         handleCategorySelect={handleCategorySelect}
         handleBrandSelect={handleBrandSelect}
-        minPriceInput={minPriceInput}
-        maxPriceInput={maxPriceInput}
       />
       <ProductGrid />
       <Footer />

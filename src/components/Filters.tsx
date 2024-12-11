@@ -1,3 +1,4 @@
+import useInput from "@/hooks/useInput";
 import {
   Center,
   Flex,
@@ -10,24 +11,26 @@ import {
   StackDirection,
   useBreakpointValue,
 } from "@chakra-ui/react";
+import { useSearchParams } from "react-router-dom";
 
 interface IFiltersProps {
   handleCategorySelect: (category: string) => void;
   handleBrandSelect: (brand: string) => void;
-  minPriceInput: { value: string; setValue: (value: string) => void };
-  maxPriceInput: { value: string; setValue: (value: string) => void };
 }
 
 const Filters = ({
   handleCategorySelect,
   handleBrandSelect,
-  minPriceInput,
-  maxPriceInput,
 }: IFiltersProps) => {
   const stackDirection: StackDirection | undefined = useBreakpointValue({
     base: "column",
     md: "row",
   });
+
+  const minPriceInput = useInput();
+  const maxPriceInput = useInput();
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const styles = {
     boxShadow: "none",
@@ -68,7 +71,7 @@ const Filters = ({
               <MenuItem onClick={() => handleCategorySelect("tablets")}>
                 Tablets
               </MenuItem>
-              <MenuItem onClick={() => handleCategorySelect("accesories")}>
+              <MenuItem onClick={() => handleCategorySelect("accessories")}>
                 Accessories
               </MenuItem>
             </MenuList>
@@ -78,7 +81,12 @@ const Filters = ({
           <Input
             type="text"
             placeholder="Min price"
-            {...minPriceInput}
+            value={minPriceInput.value}
+            onChange={(e) => {
+              minPriceInput.setValue(e.target.value);
+              searchParams.set("minPrice", e.target.value);
+              setSearchParams(searchParams);
+            }}
             {...styles}
             _active={styles}
             _focus={styles}
@@ -87,7 +95,11 @@ const Filters = ({
           <Input
             type="text"
             placeholder="Max price"
-            {...maxPriceInput}
+            onChange={(e) => {
+              maxPriceInput.setValue(e.target.value);
+              searchParams.set("maxPrice", e.target.value);
+              setSearchParams(searchParams);
+            }}
             {...styles}
             _active={styles}
             _focus={styles}
