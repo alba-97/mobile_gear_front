@@ -1,8 +1,6 @@
 import axios from "axios";
-import { addCategory as addCategoryAction } from "./categoriesSlice";
 import * as settings from "../../settings";
 import getHeaders from "../../hooks/getHeaders";
-import { Dispatch } from "@reduxjs/toolkit";
 
 export const fetchCategories = async () => {
   const { data } = await axios.get(

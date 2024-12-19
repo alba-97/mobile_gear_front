@@ -1,4 +1,4 @@
-import { CategoryResponse } from "@/interfaces/Product";
+import { CategoryResponse } from "@/interfaces/Category";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface CategoryState {
