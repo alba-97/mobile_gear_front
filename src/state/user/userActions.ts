@@ -1,8 +1,6 @@
 import axios from "axios";
-import { list } from "./userSlice";
 import * as settings from "../../settings";
 import getHeaders from "../../hooks/getHeaders";
-import { Dispatch } from "@reduxjs/toolkit";
 
 axios.defaults.withCredentials = true;
 

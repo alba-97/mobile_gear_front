@@ -11,13 +11,9 @@ const initialState: CartState = {
   totalPrice: 0,
 };
 
-const persistedState = localStorage.getItem("cart")
-  ? JSON.parse(localStorage.getItem("cart") ?? "{}")
-  : initialState;
-
 const cartSlice = createSlice({
   name: "cart",
-  initialState: persistedState,
+  initialState,
   reducers: {
     addItemToCart: (state, action) => {
       const newItem = action.payload;
@@ -28,6 +24,7 @@ const cartSlice = createSlice({
         let newItems = [...state.items];
         newItems.push(newItem);
         state.totalPrice += newItem.price;
+        state.items = newItems;
       } else {
         existingItem.quantity++;
         state.totalPrice += newItem.price;

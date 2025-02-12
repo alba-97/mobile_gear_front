@@ -27,7 +27,7 @@ const DropdownSearch = ({
   const btnRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <Box mr={10}>
+    <Box>
       <Popover
         isOpen={isOpen}
         initialFocusRef={btnRef}

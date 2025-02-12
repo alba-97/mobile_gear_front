@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addItemToCart } from "../../state/cart/cartSlice";
 import { RootState } from "@/state/store";
 import { ProductResponse } from "@/interfaces/Product";
@@ -28,6 +28,7 @@ export const ProductCard = ({ product }: IProductCardProps) => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
   );
+  const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
   const [showAlert, setShowAlert] = useState(false);
@@ -57,7 +58,7 @@ export const ProductCard = ({ product }: IProductCardProps) => {
     if (existingItem) {
       alert("Item is already in the cart");
     } else {
-      addItemToCart(item);
+      dispatch(addItemToCart(item));
       setShowAlert(true);
       setTimeout(() => setShowAlert(false), 3000);
     }
