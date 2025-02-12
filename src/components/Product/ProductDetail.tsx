@@ -78,7 +78,10 @@ export const ProductDetail = () => {
   };
 
   const handleAddToCart = () => {
-    if (!isAuthenticated) alert("Login to add items to your cart");
+    if (!isAuthenticated) {
+      alert("Login to add items to your cart");
+      return;
+    }
     if (count <= 0) {
       alert("Please select a quantity");
       return;

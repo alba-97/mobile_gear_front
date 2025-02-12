@@ -6,6 +6,7 @@ import { Home } from "./components/Home/Home";
 import { ProductDetail } from "./components/Product/ProductDetail";
 import { Cart } from "./components/Cart/Cart";
 import { Checkout } from "./components/Checkout";
+import { Payment } from "./components/Checkout/Payment";
 import { OrderHistory } from "./components/OrderHistory";
 import { Admin } from "./components/Admin/Admin";
 import { History } from "./components/History";
@@ -80,7 +81,8 @@ function App() {
             {isAuthenticated && (
               <>
                 <Route path="/cart" element={<Cart />} />
-                <Route path="checkout" element={<Checkout />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/payment" element={<Payment />} />
                 <Route path="/order-history" element={<OrderHistory />} />
               </>
             )}

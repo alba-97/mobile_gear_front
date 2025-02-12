@@ -1,81 +1,72 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Box, Heading, Text, Button } from "@chakra-ui/react";
+import axios, { isAxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
-import { checkout } from "../../state/checkout/checkoutActions";
-import { clearCart } from "../../state/cart/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Text, VStack, Divider, useToast } from "@chakra-ui/react";
 import { RootState } from "@/state/store";
 import { ICart } from "@/interfaces/Cart";
+import { axiosURL } from "@/settings";
+import getHeaders from "@/hooks/getHeaders";
 import {
-  checkoutFailure,
   checkoutRequest,
-  checkoutSuccess,
+  checkoutFailure,
 } from "@/state/checkout/checkoutSlice";
-import { isAxiosError } from "axios";
 
 export const CartOrderSummary = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const toast = useToast();
   const items = useSelector((state: RootState) => state.cart.items);
-  const checkoutLoading = useSelector(
-    (state: RootState) => state.checkout.loading
-  );
-  const checkoutState = useSelector((state: RootState) => state.checkout);
   const deliveryAmount = 1000;
 
   const subtotal = items.reduce((total: number, item: ICart) => {
     return total + item.price * item.quantity;
   }, 0);
 
-  const dispatch = useDispatch();
-
   const handleCheckout = async () => {
     try {
       dispatch(checkoutRequest());
-      await checkout(Object.values(items));
-      dispatch(checkoutSuccess());
+      const { data } = await axios.post<{ clientSecret: string }>(
+        `${axiosURL}/api/payments/payment-intents`,
+        { amount: subtotal },
+        getHeaders()
+      );
+      navigate("/payment", { state: { clientSecret: data.clientSecret } });
     } catch (error) {
-      if (isAxiosError(error)) dispatch(checkoutFailure(error.message));
-    } finally {
-      clearCart();
-      navigate("/payments");
+      if (isAxiosError(error)) {
+        dispatch(checkoutFailure(error.message));
+        toast({
+          title: "Checkout failed",
+          description: error.message,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
     }
   };
 
-  useEffect(() => {
-    if (checkoutState.completed && !checkoutState.loading) {
-      navigate("/payments");
-    } else if (checkoutState.error) {
-      alert("error en el checkout");
-    }
-  }, [checkoutState]);
-
   return (
-    <Box
-      p="4"
-      border="1px solid"
-      borderColor="gray.200"
-      borderRadius="md"
-      w="100%"
-    >
-      <Heading as="h2" size="lg" mb="4">
-        Order Summary
-      </Heading>
-      <Box mb="4">
-        <Text>Subtotal: ${subtotal.toFixed(2)}</Text>
-        <Text>Delivery: ${deliveryAmount.toFixed(2)}</Text>
-      </Box>
-      <Text fontSize="xl" mb="4">
-        Total: ${(subtotal + deliveryAmount).toFixed(2)}
-      </Text>
+    <VStack spacing={4} align="stretch" width="full">
+      <Text fontWeight="bold">Order Summary</Text>
+      <VStack spacing={2} width="full">
+        {items.map((item: ICart) => (
+          <Text key={item.id}>
+            {item.name} x {item.quantity} - ${item.price * item.quantity}
+          </Text>
+        ))}
+      </VStack>
+      <Divider />
+      <Text>Subtotal: ${subtotal}</Text>
+      <Text>Delivery: ${deliveryAmount}</Text>
+      <Text fontWeight="bold">Total: ${subtotal + deliveryAmount}</Text>
       <Button
-        colorScheme="teal"
+        colorScheme="blue"
         width="full"
         onClick={handleCheckout}
-        isLoading={checkoutLoading}
-        isDisabled={checkoutLoading}
+        isDisabled={items.length === 0}
       >
-        Checkout
+        Proceed to Checkout
       </Button>
-    </Box>
+    </VStack>
   );
 };

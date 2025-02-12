@@ -28,6 +28,6 @@
       "@pages/*": ["./src/pages/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
