@@ -11,19 +11,19 @@ interface ICartItemProps {
 }
 
 export const CartItem = ({ item }: ICartItemProps) => {
-  const { id, name, image, price, quantity } = item;
+  const { id, name, image, price, qty } = item;
 
   const navigate = useNavigate();
 
   const items = useSelector((state: RootState) => state.cart.items);
 
   const increment = () => {
-    updateQuantity({ id, quantity: quantity + 1 });
+    updateQuantity({ id, qty: qty + 1 });
   };
 
   const decrement = () => {
-    if (quantity > 1) {
-      updateQuantity({ id, quantity: quantity - 1 });
+    if (qty > 1) {
+      updateQuantity({ id, qty: qty - 1 });
     }
   };
 
@@ -47,14 +47,14 @@ export const CartItem = ({ item }: ICartItemProps) => {
           aria-label="Decrease"
           icon={<MinusIcon />}
         />
-        <Text mx="2">{quantity}</Text>
+        <Text mx="2">{qty}</Text>
         <IconButton
           onClick={increment}
           aria-label="Increase"
           icon={<AddIcon />}
         />
       </Flex>
-      <Text>${price * quantity}</Text>
+      <Text>${price * qty}</Text>
       <IconButton
         onClick={handleRemove}
         aria-label="Delete"

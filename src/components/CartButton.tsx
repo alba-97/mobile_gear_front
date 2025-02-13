@@ -51,7 +51,7 @@ const CartButton = () => {
                     width="100%"
                   >
                     <Text>{item.name}</Text>
-                    <Text>Qty: {item.quantity}</Text>
+                    <Text>Qty: {item.qty}</Text>
                     <Text>${item.price}</Text>
                   </Flex>
                 </MenuItem>

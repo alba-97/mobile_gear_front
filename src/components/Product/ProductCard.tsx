@@ -50,7 +50,7 @@ export const ProductCard = ({ product }: IProductCardProps) => {
       name: product.name,
       price: product.price,
       image: product.productImg,
-      quantity: 1,
+      qty: 1,
     };
 
     const existingItem = cartItems[item.id ?? ""];

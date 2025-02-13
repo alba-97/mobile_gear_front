@@ -91,7 +91,7 @@ export const ProductDetail = () => {
       name: product.name,
       price: product.price,
       image: product.productImg,
-      quantity: count > 0 ? count : 1,
+      qty: count > 0 ? count : 1,
     };
 
     const existingItem = item.id && cartItems[item.id];

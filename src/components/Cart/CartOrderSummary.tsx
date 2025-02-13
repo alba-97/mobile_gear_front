@@ -19,15 +19,14 @@ export const CartOrderSummary = () => {
   const deliveryAmount = 1000;
 
   const subtotal = items.reduce((total: number, item: ICart) => {
-    return total + item.price * item.quantity;
+    return total + item.price * item.qty;
   }, 0);
 
   const handleCheckout = async () => {
     try {
       dispatch(checkoutRequest());
       const { data } = await axios.post<{ clientSecret: string }>(
-        `${axiosURL}/api/payments/payment-intents`,
-        { amount: subtotal },
+        `${axiosURL}/orders/payment-intents`,
         getHeaders()
       );
       navigate("/payment", { state: { clientSecret: data.clientSecret } });
@@ -51,7 +50,7 @@ export const CartOrderSummary = () => {
       <VStack spacing={2} width="full">
         {items.map((item: ICart) => (
           <Text key={item.id}>
-            {item.name} x {item.quantity} - ${item.price * item.quantity}
+            {item.name} x {item.qty} - ${item.price * item.qty}
           </Text>
         ))}
       </VStack>

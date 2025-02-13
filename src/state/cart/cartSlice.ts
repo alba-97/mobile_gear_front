@@ -26,7 +26,7 @@ const cartSlice = createSlice({
         state.totalPrice += newItem.price;
         state.items = newItems;
       } else {
-        existingItem.quantity++;
+        existingItem.qty++;
         state.totalPrice += newItem.price;
       }
     },
@@ -34,16 +34,16 @@ const cartSlice = createSlice({
       const id = action.payload;
       const existingItem = state.items.find((item: ICart) => item.id === id);
       if (existingItem) {
-        state.totalPrice -= existingItem.price * existingItem.quantity;
+        state.totalPrice -= existingItem.price * existingItem.qty;
         delete state.items[id];
       }
     },
     updateQuantity: (state, action) => {
-      const { id, quantity } = action.payload;
+      const { id, qty } = action.payload;
       const existingItem = state.items.find((item: ICart) => item.id === id);
       if (existingItem) {
-        const quantityDifference = quantity - existingItem.quantity;
-        existingItem.quantity = quantity;
+        const quantityDifference = qty - existingItem.qty;
+        existingItem.qty = qty;
         state.totalPrice += quantityDifference * existingItem.price;
       }
     },
