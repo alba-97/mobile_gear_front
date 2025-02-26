@@ -1,259 +1,123 @@
-import {
-  Button,
-  Flex,
-  Heading,
-  ButtonGroup,
-  Box,
-  Menu,
-  MenuList,
-  MenuItem,
-  MenuButton,
-  MenuDivider,
-  IconButton,
-  useDisclosure,
-  useBreakpointValue,
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerHeader,
-  DrawerCloseButton,
-  DrawerBody,
-} from "@chakra-ui/react";
-import { FaBars } from "react-icons/fa";
-
-import { Link as RouterLink, useSearchParams } from "react-router-dom";
-import useInput from "../hooks/useInput";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";
+import { logout } from "../store/slices/authSlice";
+import { BsCart3, BsChevronDown } from "react-icons/bs";
+import { useState, useRef, useEffect } from "react";
 
-import { useNavigate } from "react-router-dom";
-
-import { RootState } from "@/state/store";
-import { logout } from "@/state/user/userSlice";
-import DropdownSearch from "./DropdownSearch";
-import Search from "./Search";
-import NavbarCategory from "./NavbarCategory";
-import CartButton from "./CartButton";
-import DrawerCategory from "./DrawerCategory";
-
-export const Navbar = () => {
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.user.isAuthenticated
-  );
-  const userData = useSelector((state: RootState) => state.user.userData);
-  const isAdmin = useSelector((state: RootState) => state.user.isAdmin);
-
-  const navigate = useNavigate();
-  const searchInput = useInput();
+const Navbar = () => {
   const dispatch = useDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { user, isAuthenticated } = useSelector(
+    (state: RootState) => state.auth
+  );
+  const { items } = useSelector((state: RootState) => state.cart);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleSearchSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSearchParams({ modelName: searchInput.value });
-    searchInput.reset();
-  };
+  const totalItems = items.reduce((total, item) => total + item.quantity, 0);
 
-  const handleCategorySelect = async (categoryName: string) => {
-    searchParams.set("categoryName", categoryName);
-    navigate({ pathname: "/", search: searchParams.toString() });
-  };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleLogout = () => {
-    localStorage.clear();
     dispatch(logout());
-    navigate("/");
+    navigate("/login");
+    setIsDropdownOpen(false);
   };
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const isDesktop = useBreakpointValue({ base: false, md: true });
-
   return (
-    <Flex
-      align="center"
-      p={4}
-      bg="gray.800"
-      color="white"
-      backgroundColor="#EC4E20"
-      justifyContent="space-between"
-    >
-      <Heading
-        as={RouterLink}
-        to="/"
-        size="md"
-        mr={4}
-        _hover={{ color: "white" }}
-      >
-        MOBILE GEAR
-      </Heading>
+    <nav className="bg-orange-500 py-4">
+      <div className="container mx-auto flex justify-between items-center px-4">
+        <Link
+          to="/"
+          className="text-2xl font-bold text-white hover:text-gray-200"
+        >
+          Mobile Gear
+        </Link>
 
-      {isDesktop && (
-        <>
-          <Flex>
-            <NavbarCategory
-              text="Mobile Phones"
-              onClick={() => handleCategorySelect("smartphone")}
-            />
-            <NavbarCategory
-              text="Tablets"
-              onClick={() => handleCategorySelect("tablets")}
-            />
-            <NavbarCategory
-              text="Accessories"
-              onClick={() => handleCategorySelect("accessories")}
-            />
-          </Flex>
-          <Search {...searchInput} handleSubmit={handleSearchSubmit} />
+        <div className="flex items-center space-x-6">
+          <Link to="/cart" className="text-white hover:text-gray-200 relative">
+            <BsCart3 className="text-2xl" />
+            {totalItems > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                {totalItems}
+              </span>
+            )}
+          </Link>
+
+          <Link to="/products" className="text-white hover:text-gray-200">
+            Products
+          </Link>
+
           {isAuthenticated ? (
-            <Menu>
-              <MenuButton
-                as={Button}
-                backgroundColor={"#3498DB"}
-                color="white"
-                _hover={{ bg: "#026bb0" }}
-                _active={{ bg: "#026bb0" }}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="flex items-center space-x-1 text-white hover:text-gray-200 p-0"
               >
-                Account
-              </MenuButton>
-              <MenuList>
-                <MenuItem color="black" pointerEvents="none">
-                  {userData.username}
-                </MenuItem>
-                <MenuDivider />
-                <MenuItem as={RouterLink} to="/history" color="black">
-                  History
-                </MenuItem>
-                {isAdmin ? (
-                  <MenuItem as={RouterLink} to="/admin" color="black">
-                    My dashboard
-                  </MenuItem>
-                ) : (
-                  <MenuItem as={RouterLink} to="" color="black">
-                    My list
-                  </MenuItem>
-                )}
-                <MenuDivider />
-                <MenuItem
-                  as={RouterLink}
-                  to="/"
-                  onClick={handleLogout}
-                  color="black"
-                >
-                  Log out
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          ) : (
-            <ButtonGroup gap="2">
-              <RouterLink to="/signup">
-                <Button
-                  backgroundColor="transparent"
-                  color="white"
-                  _hover={{ bg: "#a62b07" }}
-                >
-                  Sign Up
-                </Button>
-              </RouterLink>
-              <RouterLink to="/login">
-                <Button
-                  backgroundColor="#3498DB"
-                  color="white"
-                  _hover={{ bg: "#026bb0" }}
-                >
-                  Log In
-                </Button>
-              </RouterLink>
-            </ButtonGroup>
-          )}
-        </>
-      )}
-
-      {!isDesktop && (
-        <Flex align="center">
-          <DropdownSearch {...searchInput} handleSubmit={handleSearchSubmit} />
-
-          {isAuthenticated && <CartButton />}
-
-          <IconButton
-            icon={<FaBars />}
-            size="lg"
-            borderRadius="md"
-            color="white"
-            bg="transparent"
-            _hover={{ bg: "#a62b07" }}
-            onClick={onOpen}
-            aria-label="Menu"
-          />
-
-          <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
-            <DrawerOverlay />
-            <DrawerContent>
-              <DrawerCloseButton />
-              <DrawerHeader>Menu</DrawerHeader>
-              <DrawerBody>
-                <DrawerCategory
-                  text="Mobile Phones"
-                  onClick={() => handleCategorySelect("smartphone")}
+                <span>{user?.firstName}</span>
+                <BsChevronDown
+                  className={`w-3 h-3 mt-1 transition-transform duration-200 ${
+                    isDropdownOpen ? "rotate-180" : ""
+                  }`}
                 />
-                <DrawerCategory
-                  text="Tablets"
-                  onClick={() => handleCategorySelect("tablets")}
-                />
-                <DrawerCategory
-                  text="Accessories"
-                  onClick={() => handleCategorySelect("accessories")}
-                />
-                <DrawerCategory
-                  text="Laptops"
-                  onClick={() => handleCategorySelect("laptops")}
-                />
-                <Box mt={4}>
-                  {isAuthenticated ? (
-                    <Menu>
-                      <MenuItem as={RouterLink} to="/history">
-                        History
-                      </MenuItem>
-                      {isAdmin ? (
-                        <MenuItem as={RouterLink} to="/admin">
-                          My dashboard
-                        </MenuItem>
-                      ) : (
-                        <MenuItem as={RouterLink} to="">
-                          My list
-                        </MenuItem>
-                      )}
-                      <MenuDivider />
-                      <MenuItem as={RouterLink} to="/" onClick={handleLogout}>
-                        Log out
-                      </MenuItem>
-                    </Menu>
-                  ) : (
-                    <ButtonGroup gap="2">
-                      <RouterLink to="/signup">
-                        <Button
-                          backgroundColor={"#3498DB"}
-                          color="white"
-                          width="100%"
-                        >
-                          Sign Up
-                        </Button>
-                      </RouterLink>
-                      <RouterLink to="/login">
-                        <Button
-                          backgroundColor={"#3498DB"}
-                          color="white"
-                          width="100%"
-                        >
-                          Log In
-                        </Button>
-                      </RouterLink>
-                    </ButtonGroup>
+              </button>
+
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                  <Link
+                    to="/orders"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    My Orders
+                  </Link>
+                  {user?.role === "admin" && (
+                    <Link
+                      to="/admin/orders"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => setIsDropdownOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
                   )}
-                </Box>
-              </DrawerBody>
-            </DrawerContent>
-          </Drawer>
-        </Flex>
-      )}
-    </Flex>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              <Link to="/login" className="text-white hover:text-gray-200">
+                Login
+              </Link>
+              <Link to="/register" className="text-white hover:text-gray-200">
+                Register
+              </Link>
+            </>
+          )}
+        </div>
+      </div>
+    </nav>
   );
 };
+
+export default Navbar;
