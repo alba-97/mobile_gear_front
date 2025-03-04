@@ -1,34 +1,50 @@
-# E-commerce Mobile Gear
+# React + TypeScript + Vite
 
-### Goals
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-In this 2-week project, we created a B2C website for tech products, focused on mobile phones and accessories.
+Currently, two official plugins are available:
 
-### Technologies and Tools
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-#### Frontend
+## Expanding the ESLint configuration
 
-JavaScript, React, Vite.js, Redux, Axios, Chakra UI, CSS.
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-### Features
+- Configure the top-level `parserOptions` property like this:
 
-- Basic CRUD operations for user management.
-- Admin: add/edit users and administrators; add/edit products; view product list.
-- Product search through filters: name, category, or description.
-- View individual products and their features.
-- Shopping cart: products, quantities, subtotal, and total with applied discounts.
-- Purchase history.
-- Navbar: Logo, menu, search bar, and registration.
-- Keep the session active after browser closure or refresh.
+```js
+export default tseslint.config({
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+```
 
-### Setup
+- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
+- Optionally add `...tseslint.configs.stylisticTypeChecked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
 
-- Clone this repository and run the following in the terminal:
+```js
+// eslint.config.js
+import react from 'eslint-plugin-react'
 
-`npm install`
-to install dependencies from both the API and client folders separately. (mobile_gear_front mobile_gear_back)
-
-- Usage:
-  After cloning the repository and installing dependencies, you can run from both the client and API folders separately:
-
-`npm run dev`
+export default tseslint.config({
+  // Set the react version
+  settings: { react: { version: '18.3' } },
+  plugins: {
+    // Add the react plugin
+    react,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended rules
+    ...react.configs.recommended.rules,
+    ...react.configs['jsx-runtime'].rules,
+  },
+})
+```

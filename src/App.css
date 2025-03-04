@@ -1,11 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 #root {
-  margin: 0;
-  padding: 0;
-  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
 }
 
 .logo {
@@ -14,9 +11,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
-
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
 @keyframes logo-spin {
@@ -40,49 +39,4 @@
 
 .read-the-docs {
   color: #888;
-}
-
-.cart-icon-container {
-  position: relative;
-  cursor: pointer;
-}
-
-.cart-dropdown {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  background: white;
-  border: 1px solid #ddd;
-  padding: 1rem;
-  min-width: 300px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  z-index: 1000;
-}
-
-.cart-items {
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.cart-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #eee;
-}
-
-.checkout-button {
-  display: block;
-  width: 100%;
-  padding: 0.75rem;
-  margin-top: 1rem;
-  background: #007bff;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 4px;
-}
-
-.checkout-button:hover {
-  background: #0056b3;
 }
