@@ -16,7 +16,7 @@ const CATEGORIES = [
 
 const ProductsPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { products, error, filters, pagination } = useSelector(
+  const { products, error, loading, filters, pagination } = useSelector(
     (state: RootState) => state.products
   );
 
@@ -164,7 +164,7 @@ const ProductsPage: React.FC = () => {
         </div>
       </div>
 
-      <ProductList products={products} error={error} />
+      <ProductList products={products} error={error} loading={loading} />
 
       {pagination && (
         <Pagination

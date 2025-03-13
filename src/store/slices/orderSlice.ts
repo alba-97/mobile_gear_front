@@ -122,7 +122,10 @@ export const fetchUserOrders = createAsyncThunk(
   "orders/fetchUserOrders",
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(`${API_URL}/orders`, getHeaders());
+      const { data } = await axios.get(
+        `${API_URL}/orders/my-orders`,
+        getHeaders()
+      );
       return data;
     } catch (error: any) {
       return rejectWithValue(

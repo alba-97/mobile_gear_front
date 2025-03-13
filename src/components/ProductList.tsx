@@ -4,22 +4,25 @@ import { Link } from "react-router-dom";
 import { AppDispatch } from "../store";
 import { Product } from "../store/slices/productSlice";
 import { addToCart } from "../store/slices/cartSlice";
+import Spinner from "./Spinner";
 
 interface ProductListProps {
   products: Product[];
   error: string | null;
+  loading: boolean;
 }
 
-const ProductList = memo(({ products, error }: ProductListProps) => {
+const ProductList = memo(({ products, error, loading }: ProductListProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleAddToCart = (product: Product) => {
     dispatch(addToCart(product));
   };
 
-  if (error) {
+  if (loading) return <Spinner />;
+
+  if (error)
     return <div className="text-center text-red-500 text-xl mt-8">{error}</div>;
-  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
