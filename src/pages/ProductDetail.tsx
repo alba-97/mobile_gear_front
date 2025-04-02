@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { fetchProductById } from "../store/slices/productSlice";
 import { addToCart } from "../store/slices/cartSlice";
+import Spinner from "../components/Spinner";
 
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
-  const { selectedProduct, isLoading, error } = useSelector(
+  const { selectedProduct, loading, error } = useSelector(
     (state: RootState) => state.products
   );
 
@@ -28,15 +29,10 @@ const ProductDetail: React.FC = () => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="text-center text-xl mt-8">Loading product details...</div>
-    );
-  }
+  if (loading) return <Spinner />;
 
-  if (error) {
+  if (error)
     return <div className="text-center text-red-500 mt-8">Error: {error}</div>;
-  }
 
   if (!selectedProduct) {
     return <div className="text-center text-xl mt-8">Product not found</div>;
